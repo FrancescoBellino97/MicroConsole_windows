@@ -5,26 +5,19 @@
 #
 # BUILDING TARGET:
 #	1) all: 			build the output file depending on the build configuration
-#	2) clean:			remove the build directory depending on the build configuration
-#	3) cleanall:		remove the BUILD_DIR if present
+#	2) cleanall:		remove the BUILD_DIR if present
 #
-# WORKFLOW: TODO: Update description
-#  1) Define the project name, application and driver directories,
-#	  build directory, 
-#
-#  1) Define the project name, application directory, library directory,
-#     headers directory and build output directory.
-#  2) Define the object file list and the directory of header files.
-#  3) Define the dependency variable (for each object file a .d dependecy file 
-#	  is generated (they are considered makefiles).
-#  4) Read all dependencies with the "include" command (the - is used to 
-#	  suppress errors that are generated when the dependency files are
-#	  missing, the command is invoked multiple times).
-#  5) Define the compiler variable, the compiler options variable and the 
-#     dependency variable.
-#  6) Create the build directory if not exist.
-#  7) Define the "all" and "cleanall" targets.
-#
+# DESCRIPTION:
+#	This makefile perform the following operations:
+#	- create a BUILD_DIR directory
+#	- compile all sources in APP_DIR into BUILD_SUPP_DIR
+#	- link all the objects files into an .exe into BUILD_DIR
+#	- generate the assembly code .lst into BUILD_DIR
+#	- generate the memory allocation file .hdr into BUILD_DIR
+#	- estimate the memory consumption with the tool MEM_USAGE
+#	- print and save the memory consumtpio into BUILD_DIR
+#	- copy the .DLL libraries into BUILD_DIR
+#	
 #===============================================================================
 
 
@@ -36,7 +29,6 @@ PROJECT_NAME		:=	MicroConsole
 
 # Application and driver directories
 APP_DIR				:=	core
-DRV_DIR				:=	drivers
 
 # Build directory (generic and specific for target)
 BUILD_DIR			:=	build
@@ -48,8 +40,7 @@ APP_OBJS 			:= 	$(BUILD_SUPP_DIR)/main.o
 
 
 # Include directories list
-INCS				:=	-I$(APP_DIR)/inc \
-						-I$(DRV_DIR)/inc
+INCS				:=	-I$(APP_DIR)/inc
 
 # Dependency files
 DEPS				:=	$(OBJS:.o=.d)
@@ -74,18 +65,13 @@ REQS			:=	$(BUILD_SUPP_DIR) \
 #===============================================================================#
 #								TARGETS											#
 #===============================================================================#
-.PHONY: all cleanall clean
+.PHONY: all cleanall
 
 all:	$(REQS)
 
 cleanall:	#Delete directory recursively (/S) and without confirm (/Q)
 	@if exist "$(BUILD_DIR)" rmdir /Q /S "$(BUILD_DIR)"
 	@echo Deleting build directory
-	
-
-clean:		#Delete target directory recursively (/S) and without confirm (/Q)
-	@if exist "$(BUILD_TARGET_DIR)" rmdir /Q /S "$(BUILD_TARGET_DIR)"
-	@echo Deleting target build directory
 
 
 #===============================================================================#
@@ -109,13 +95,8 @@ $(BUILD_TARGET_DIR)/memory_usage.txt: $(BUILD_TARGET_DIR)/$(PROJECT_NAME).hdr
 	@$(MEM_USAGE) $^ > $@
 	@$(MEM_USAGE) $^
 
-# Application files build
+# Source files build
 $(BUILD_SUPP_DIR)/%.o: $(APP_DIR)/src/%.c
-	@$(CC) $(CFLAGS) $(CPPFLAGS) $(DEPFLAGS) -c $< $(DLLFLAGS) -o $@
-	@echo Compiling $<
-
-# Driver files build
-$(BUILD_SUPP_DIR)/%.o: $(DRV_DIR)/src/%.c
 	@$(CC) $(CFLAGS) $(CPPFLAGS) $(DEPFLAGS) -c $< $(DLLFLAGS) -o $@
 	@echo Compiling $<
 
