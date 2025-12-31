@@ -1,7 +1,7 @@
 #===============================================================================
 # @file    makefile
 # @author  Bellino Francesco
-# @brief   Makefile for BlinkLed project 
+# @brief   Makefile for MicroConsole (Windows) project 
 #
 # BUILDING TARGET:
 #	1) all: 			build the output file depending on the build configuration
@@ -32,22 +32,19 @@
 #								BUILD OPTIONS									#
 #===============================================================================#
 # Project name
-PROJECT_NAME		:=	BlinkLed
+PROJECT_NAME		:=	MicroConsole
 
 # Application and driver directories
 APP_DIR				:=	core
-DRV_DIR				:=	drivers/$(TARGET)
+DRV_DIR				:=	drivers
 
 # Build directory (generic and specific for target)
 BUILD_DIR			:=	build
-BUILD_TARGET_DIR	:=	$(BUILD_DIR)/$(TARGET)
-BUILD_SUPP_DIR		:=	$(BUILD_TARGET_DIR)/support
+BUILD_SUPP_DIR		:=	$(BUILD_DIR)/support
 
 
 # Object files list
-OBJS 				:= 	$(BUILD_SUPP_DIR)/main.o \
-						$(BUILD_SUPP_DIR)/micro.o \
-						$(BUILD_SUPP_DIR)/startup.o
+APP_OBJS 			:= 	$(BUILD_SUPP_DIR)/main.o
 
 
 # Include directories list
@@ -57,10 +54,6 @@ INCS				:=	-I$(APP_DIR)/inc \
 # Dependency files
 DEPS				:=	$(OBJS:.o=.d)
 -include $(DEPS)
-
-# Makefile target variables
--include $(DRV_DIR)/$(TARGET).mk
-
 
 #===============================================================================#
 #								POST-BUILD OPTIONS								#
@@ -72,7 +65,7 @@ MEM_USAGE		:=	tools\memoryUsage.exe
 #								BUILD REQUIREMENTS								#
 #===============================================================================#
 REQS			:=	$(BUILD_SUPP_DIR) \
-					$(BUILD_TARGET_DIR)/$(PROJECT_NAME).elf \
+					$(BUILD_TARGET_DIR)/$(PROJECT_NAME).exe \
 					$(BUILD_TARGET_DIR)/$(PROJECT_NAME).lst \
 					$(BUILD_TARGET_DIR)/$(PROJECT_NAME).hdr \
 					$(BUILD_TARGET_DIR)/memory_usage.txt
@@ -98,8 +91,8 @@ clean:		#Delete target directory recursively (/S) and without confirm (/Q)
 #===============================================================================#
 #								BUILD PROCESS									#
 #===============================================================================#
-# ELF file build
-$(BUILD_TARGET_DIR)/$(PROJECT_NAME).elf: $(OBJS)
+# EXE file build
+$(BUILD_TARGET_DIR)/$(PROJECT_NAME).exe: $(OBJS)
 	@$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $^ -o $@ -Wl,-Map="$(BUILD_TARGET_DIR)/$(PROJECT_NAME).map"
 	@echo Creating $@
 
@@ -122,7 +115,7 @@ $(BUILD_SUPP_DIR)/%.o: $(APP_DIR)/src/%.c
 	@echo Compiling $<
 
 # Driver files build
-$(BUILD_SUPP_DIR)/%.o: $(DRV_DIR)/src/%.c 
+$(BUILD_SUPP_DIR)/%.o: $(DRV_DIR)/src/%.c
 	@$(CC) $(CFLAGS) $(CPPFLAGS) $(DEPFLAGS) -c $< $(DLLFLAGS) -o $@
 	@echo Compiling $<
 
