@@ -29,6 +29,7 @@ PROJECT_NAME		:=	MicroConsole
 
 # Application and driver directories
 APP_DIR				:=	core
+LIB_DIR				:=	lib
 
 # Build directory (generic and specific for target)
 BUILD_DIR			:=	build
@@ -36,30 +37,57 @@ BUILD_SUPP_DIR		:=	$(BUILD_DIR)/support
 
 
 # Object files list
-APP_OBJS 			:= 	$(BUILD_SUPP_DIR)/main.o
+OBJS 				:= 	$(BUILD_SUPP_DIR)/main.o
 
 
 # Include directories list
-INCS				:=	-I$(APP_DIR)/inc
+INCS				:=	-I$(APP_DIR)/inc \
+					-I$(LIB_DIR)/sdl2/include/SDL2 \
+					-I$(LIB_DIR)/sdl2_ttf/include/SDL2
 
 # Dependency files
 DEPS				:=	$(OBJS:.o=.d)
 -include $(DEPS)
 
+# SDL library path
+SDL_PATH        :=    $(LIB_DIR)\sdl2\lib\x64
+SDL_TTF_PATH    :=    $(LIB_DIR)\sdl2_ttf\lib\x64
+
+# Path for DLL copy at end of build process
+DLLS			:=	$(BUILD_DIR)\SDL2.dll \
+					$(BUILD_DIR)\SDL2_ttf.dll \
+					$(BUILD_DIR)\libfreetype-6.dll
+
+
+#===============================================================================#
+#								POST-BUILD OPTIONS								#
+#===============================================================================#
+CC				:=	C:\msys64\ucrt64\bin\gcc
+DLLFLAGS		:=	-lSDL2 -lSDL2_ttf -lfreetype-6 -L$(BUILD_DIR)
+CFLAGS			:=	-Wall -Wextra -g
+CPPFLAGS		:=	$(INCS)
+DEPFLAGS		:=	-MMD -MP
+
+
 #===============================================================================#
 #								POST-BUILD OPTIONS								#
 #===============================================================================#
 MEM_USAGE		:=	tools\memoryUsage.exe
+OBJDUMP			:=	C:\msys64\ucrt64\bin\objdump
 
 
+###		POST-BUILD OPTIONS	###
+
+MEM_USAGE		:=	tools\memoryUsage.exe
 #===============================================================================#
 #								BUILD REQUIREMENTS								#
 #===============================================================================#
 REQS			:=	$(BUILD_SUPP_DIR) \
-					$(BUILD_TARGET_DIR)/$(PROJECT_NAME).exe \
-					$(BUILD_TARGET_DIR)/$(PROJECT_NAME).lst \
-					$(BUILD_TARGET_DIR)/$(PROJECT_NAME).hdr \
-					$(BUILD_TARGET_DIR)/memory_usage.txt
+					$(DLLS) \
+					$(BUILD_DIR)/$(PROJECT_NAME).exe \
+					$(BUILD_DIR)/$(PROJECT_NAME).lst \
+					$(BUILD_DIR)/$(PROJECT_NAME).hdr \
+					$(BUILD_DIR)/memory_usage.txt
 					
 
 #===============================================================================#
@@ -78,20 +106,20 @@ cleanall:	#Delete directory recursively (/S) and without confirm (/Q)
 #								BUILD PROCESS									#
 #===============================================================================#
 # EXE file build
-$(BUILD_TARGET_DIR)/$(PROJECT_NAME).exe: $(OBJS)
-	@$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $^ -o $@ -Wl,-Map="$(BUILD_TARGET_DIR)/$(PROJECT_NAME).map"
+$(BUILD_DIR)/$(PROJECT_NAME).exe: $(OBJS)
+	@$(CC) $(CFLAGS) $(CPPFLAGS) $^ $(DLLFLAGS) -o $@ -Wl,-Map="$(BUILD_DIR)/$(PROJECT_NAME).map"
 	@echo Creating $@
 
 # Assembly code file generation
-$(BUILD_TARGET_DIR)/$(PROJECT_NAME).lst: $(BUILD_TARGET_DIR)/$(PROJECT_NAME).elf
+$(BUILD_DIR)/$(PROJECT_NAME).lst: $(BUILD_DIR)/$(PROJECT_NAME).exe
 	@$(OBJDUMP) -S $^ > $@
 
 # Memory allocation file generation
-$(BUILD_TARGET_DIR)/$(PROJECT_NAME).hdr: $(BUILD_TARGET_DIR)/$(PROJECT_NAME).elf
+$(BUILD_DIR)/$(PROJECT_NAME).hdr: $(BUILD_DIR)/$(PROJECT_NAME).exe
 	@$(OBJDUMP) -h $^ > $@
 
 # Memory usage file generation
-$(BUILD_TARGET_DIR)/memory_usage.txt: $(BUILD_TARGET_DIR)/$(PROJECT_NAME).hdr
+$(BUILD_DIR)/memory_usage.txt: $(BUILD_DIR)/$(PROJECT_NAME).hdr
 	@$(MEM_USAGE) $^ > $@
 	@$(MEM_USAGE) $^
 
@@ -104,3 +132,16 @@ $(BUILD_SUPP_DIR)/%.o: $(APP_DIR)/src/%.c
 $(BUILD_SUPP_DIR):
 	@mkdir "$(BUILD_SUPP_DIR)\"
 	@echo Creating build directory
+
+# DLL transfer to build directory (only windows)
+$(BUILD_DIR)\SDL2.dll:
+	@copy $(SDL_PATH)\SDL2.dll $(BUILD_DIR) > NUL
+	@echo Moving $@ to build directory
+
+$(BUILD_DIR)\SDL2_ttf.dll:
+	@copy $(SDL_TTF_PATH)\SDL2_ttf.dll $(BUILD_DIR) > NUL
+	@echo Moving $@ to build directory
+
+$(BUILD_DIR)\libfreetype-6.dll:
+	@copy $(SDL_TTF_PATH)\libfreetype-6.dll $(BUILD_DIR) > NUL
+	@echo Moving $@ to build directory
