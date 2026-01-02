@@ -2,8 +2,11 @@
  ******************************************************************************
  * @file    emu.c
  * @author  Bellino Francesco
- * @brief   Emulation module source code: it manage the sub-modules cart, cpu,
- * 			ppu and apu.
+ * @brief   Emulation module source code: m
+ * 				- manage cart sub-module
+ * 				- manage cpu sub-module
+ * 				- manage ppu sub_module
+ * 				- manage apu sub-module.
  *
  ******************************************************************************
  */

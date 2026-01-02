@@ -2,8 +2,9 @@
  ******************************************************************************
  * @file    cart.c
  * @author  Bellino Francesco
- * @brief   Cartridge module source code: manage the communication with the
- * 			ROM data.
+ * @brief   Cartridge module source code:
+ * 				- perform check on ROM data.
+ * 				- manage the communication with the ROM data.
  *
  ******************************************************************************
  */
@@ -63,7 +64,7 @@ uint8_t cart_init()
     }
 
 
-    /* Checksum header check */
+    /* Header section checksum calculation*/
     if (ret_val == NO_ERROR)
     {
     	/* Perform checksum on ROM data starting from TITLE to MASK_VERSION_NUMER addresses */
@@ -74,7 +75,7 @@ uint8_t cart_init()
     		uint8_t rom_data;
 
     		rom_data = cart_read(address);
-    		checksum = checksum - rom_data - 1;
+    		checksum = checksum - rom_data - 1;	/*From documentation*/
     	}
 
     	/* Read checksum in ROM */
@@ -85,7 +86,6 @@ uint8_t cart_init()
     		return CART_CHECKSUM_FAILED;
     	}
     }
-
 
     return ret_val;
 }

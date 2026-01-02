@@ -2,7 +2,8 @@
  ******************************************************************************
  * @file    main.c
  * @author  Bellino Francesco
- * @brief   Main application source code: manage emulation module.
+ * @brief   Main application source code:
+ * 				- manage emulation module.
  *
  ******************************************************************************
  */
