@@ -108,6 +108,7 @@ static uint8_t cart_read(uint16_t address)
 
 	/* Read value from ROM */
 	value_read = fgetc(cart_ctx.memory_pointer);
+	cart_ctx.last_address = address;
 
 	return value_read;
 }
