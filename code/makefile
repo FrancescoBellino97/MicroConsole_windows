@@ -37,7 +37,10 @@ BUILD_SUPP_DIR		:=	$(BUILD_DIR)/support
 
 
 # Object files list
-OBJS 				:= 	$(BUILD_SUPP_DIR)/main.o
+OBJS 				:= 	$(BUILD_SUPP_DIR)/main.o \
+						$(BUILD_SUPP_DIR)/emu.o \
+						$(BUILD_SUPP_DIR)/cart.o \
+						$(BUILD_SUPP_DIR)/bus.o
 
 
 # Include directories list
