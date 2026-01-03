@@ -43,5 +43,9 @@ uint8_t emu_init()
   */
 void emu_run()
 {
+	while (1)
+	{
+		cpu_run();
+	}
 	return;
 }
