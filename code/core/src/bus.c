@@ -7,3 +7,27 @@
  *
  ******************************************************************************
  */
+
+#include "bus.h"
+#include "cart.h"
+
+
+/**
+  * @brief	Read a data at specific address
+  * @param  uint16_t:	address to access
+  * @retval uint8_t:	data read
+  */
+uint8_t bus_read(uint16_t address)
+{
+	uint8_t read_val;
+	if (address <= ADDRESS_END_ROM)
+	{
+		read_val = cart_read(address);
+	}
+	else
+	{	/*Address not managed*/
+		read_val = 0xFF;
+	}
+
+	return read_val;
+}

@@ -12,8 +12,9 @@
  */
 
 #include "emu.h"
-#include "cart.h"
 #include "common.h"
+#include "cart.h"
+#include "cpu.h"
 
 
 /**
@@ -27,11 +28,16 @@ uint8_t emu_init()
 
 	ret_val = cart_init();
 
+	if (ret_val == NO_ERROR)
+	{
+		cpu_init();
+	}
+
 	return ret_val;
 }
 
 /**
-  * @brief	TODO
+  * @brief	It runs a cycle of Emulation module
   * @param  None
   * @retval None
   */

@@ -16,9 +16,6 @@
 cart_context cart_ctx;
 
 
-static uint8_t cart_read(uint16_t address);
-
-
 /**
   * @brief	Access ROM and perform initialization and checks
   * @param  None
@@ -96,7 +93,7 @@ uint8_t cart_init()
   * @param  None
   * @retval uint8_t:	value read
   */
-static uint8_t cart_read(uint16_t address)
+uint8_t cart_read(uint16_t address)
 {
 	uint8_t value_read;
 
