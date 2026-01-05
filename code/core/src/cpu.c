@@ -18,9 +18,10 @@ static void decode(uint8_t op_code);
 static void execute();
 
 /*Emulated functions*/
-static uint8_t ADC(uint8_t num1, uint8_t num2);
-static uint8_t ADD_8_BIT(uint8_t num1, uint8_t num2);
-static uint16_t ADD_16_BIT(uint16_t num1, uint16_t num2);
+static uint8_t ADC_U8_U8_BIT(uint8_t num1, uint8_t num2);
+static uint8_t ADD_U8_U8_BIT(uint8_t num1, uint8_t num2);
+static uint16_t ADD_U16_S8_BIT(uint16_t num1, int8_t num2);
+static uint16_t ADD_U16_U16_BIT(uint16_t num1, uint16_t num2);
 
 
 cpu_context cpu_ctx;
@@ -252,7 +253,7 @@ static void execute()
 		break;
 
 	case TYPE_ADC_A_R8:	/*It takes only 1 cycle*/
-		cpu_ctx.registers.A = ADC(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
+		cpu_ctx.registers.A = ADC_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
 		break;
 
 	case TYPE_ADC_A_HL:
@@ -262,7 +263,7 @@ static void execute()
 			cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
 			break;
 		case 1:	/*Second cycle perform ADC*/
-			cpu_ctx.registers.A = ADC(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
+			cpu_ctx.registers.A = ADC_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
 			break;
 		}
 		break;
@@ -274,13 +275,13 @@ static void execute()
 			cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
 			break;
 		case 1:	/*Second cycle perform ADC*/
-			cpu_ctx.registers.A = ADC(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
+			cpu_ctx.registers.A = ADC_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
 			break;
 		}
 		break;
 
 	case TYPE_ADD_A_R8:	/*It takes only 1 cycle*/
-		cpu_ctx.registers.A = ADD_8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
+		cpu_ctx.registers.A = ADD_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
 		break;
 
 	case TYPE_ADD_A_HL:
@@ -290,7 +291,7 @@ static void execute()
 			cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
 			break;
 		case 1:	/*Second cycle perform ADD*/
-			cpu_ctx.registers.A = ADD_8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
+			cpu_ctx.registers.A = ADD_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
 			break;
 		}
 		break;
@@ -302,7 +303,7 @@ static void execute()
 			cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
 			break;
 		case 1:	/*Second cycle perform ADD*/
-			cpu_ctx.registers.A = ADD_8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
+			cpu_ctx.registers.A = ADD_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
 			break;
 		}
 		break;
@@ -311,7 +312,7 @@ static void execute()
 		switch (cpu_ctx.instruction.cycles)
 		{
 		case 2:	/*First cycle perform ADD*/
-			cpu_ctx.registers.HL = ADD_16_BIT(cpu_ctx.registers.HL, cpu_ctx.instruction.data);
+			cpu_ctx.registers.HL = ADD_U16_U16_BIT(cpu_ctx.registers.HL, cpu_ctx.instruction.data);
 			break;
 		case 1:	/*Second cycle do nothing */
 			break;
@@ -327,7 +328,7 @@ static void execute()
 		case 3:	/*Second cycle do nothing*/
 			break;
 		case 2:	/*Third cycle perform ADD*/
-			cpu_ctx.registers.SP = ADD_16_BIT(cpu_ctx.registers.SP, cpu_ctx.instruction.data & 0xFF);
+			cpu_ctx.registers.SP = ADD_U16_S8_BIT(cpu_ctx.registers.SP, cpu_ctx.instruction.data & 0xFF);
 			break;
 		case 1:	/*Fourth cycle do nothing*/
 			break;
@@ -353,16 +354,16 @@ static void execute()
 
 
 /**
-  * @brief	Execute ADC between num1 and num2 and update flags
-  * @param  num1:		first number
-  * 		num2:		second number
-  * @retval uint8_t:	result
+  * @brief	Execute ADC between unsigned 8bit and unsigned 8bit and update flags
+  * @param  num1:		first number unsigned 8bit
+  * 		num2:		second number unsigned 8bit
+  * @retval uint8_t:	result unsigned 8bit
   */
-static uint8_t ADC(uint8_t num1, uint8_t num2)
+static uint8_t ADC_U8_U8_BIT(uint8_t num1, uint8_t num2)
 {
 	uint16_t result;
 
-	result = num1 + num2 + cpu_ctx.registers.c_flag;
+	result = (uint16_t)(num1 + num2 + cpu_ctx.registers.c_flag);
 
 	/* Reset cpu flags */
 	cpu_ctx.registers.c_flag = 0U;
@@ -380,16 +381,16 @@ static uint8_t ADC(uint8_t num1, uint8_t num2)
 
 
 /**
-  * @brief	Execute ADD 8 bits between num1 and num2 and update flags
-  * @param  num1:		first number
-  * 		num2:		second number
-  * @retval uint8_t:	result
+  * @brief	Execute ADD between unsigned 8bit and unsigned 8bit and update flags
+  * @param  num1:		first number unsigned 8bit
+  * 		num2:		second number unsigned 8bit
+  * @retval uint8_t:	result unsigned 8bit
   */
-static uint8_t ADD_8_BIT(uint8_t num1, uint8_t num2)
+static uint8_t ADD_U8_U8_BIT(uint8_t num1, uint8_t num2)
 {
 	uint16_t result;
 
-	result = num1 + num2;
+	result = (uint16_t)(num1 + num2);
 
 	/* Reset cpu flags */
 	cpu_ctx.registers.c_flag = 0U;
@@ -405,24 +406,18 @@ static uint8_t ADD_8_BIT(uint8_t num1, uint8_t num2)
 	return (uint8_t)result;
 }
 
+
 /**
-  * @brief	Execute ADD 16 bits between num1 and num2 and update flags
-  * @param  num1:		first number
-  * 		num2:		second number
-  * @retval uint16_t:	result
+  * @brief	Execute ADD between unsigned 16bit and signed 8bit and update flags
+  * @param  num1:		first number unsigned 16bit
+  * 		num2:		second number signed 8bit
+  * @retval uint16_t:	result unsigned 16bit
   */
-static uint16_t ADD_16_BIT(uint16_t num1, uint16_t num2)
+static uint16_t ADD_U16_S8_BIT(uint16_t num1, int8_t num2)
 {
 	uint32_t result;
 
-	if (cpu_ctx.instruction.type == TYPE_ADD_SP_S8)
-	{	/*In case of TYPE_ADD_SP_S8 num2 is considered signed 8 bits*/
-		result = num1 + (int8_t)num2;
-	}
-	else
-	{
-		result = num1 + num2;
-	}
+	result = (uint32_t)(num1 + num2);
 
 	/* Reset cpu flags */
 	cpu_ctx.registers.c_flag = 0U;
@@ -431,17 +426,35 @@ static uint16_t ADD_16_BIT(uint16_t num1, uint16_t num2)
 	cpu_ctx.registers.z_flag = 0U;
 
 	/* Update CPU flags */
-	if (cpu_ctx.instruction.type == TYPE_ADD_SP_S8)
-	{	/*There is an exception for TYPE_ADD_SP_S8 where flags are calculated on ADD 8 bit and zero is always 0*/
-		if (result > 0xFF)		cpu_ctx.registers.c_flag = 1U;
-		if ((uint16_t)((num1 & 0xF) + (num2 & 0xF)) > 0xF)		cpu_ctx.registers.h_flag = 1U;
-	}
-	else
-	{
-		if (result > 0xFFFF)	cpu_ctx.registers.c_flag = 1U;
-		if ((uint16_t)((num1 & 0xFF) + (num2 & 0xFF)) > 0xFF)	cpu_ctx.registers.h_flag = 1U;
-		if (result == 0U)	cpu_ctx.registers.z_flag = 1U;
-	}
+	if (result > 0xFF)		cpu_ctx.registers.c_flag = 1U;
+	if ((uint16_t)((num1 & 0xF) + (num2 & 0xF)) > 0xF)		cpu_ctx.registers.h_flag = 1U;
+
+	return (uint16_t)result;
+}
+
+
+/**
+  * @brief	Execute ADD between unsigned 16bit and unsigned 16bit and update flags
+  * @param  num1:		first number unsigned 16bit
+  * 		num2:		second number unsigned 16bit
+  * @retval uint16_t:	result unsigned 16bit
+  */
+static uint16_t ADD_U16_U16_BIT(uint16_t num1, uint16_t num2)
+{
+	uint32_t result;
+
+	result = (uint32_t)(num1 + num2);
+
+	/* Reset cpu flags */
+	cpu_ctx.registers.c_flag = 0U;
+	cpu_ctx.registers.h_flag = 0U;
+	cpu_ctx.registers.n_flag = 0U;
+	cpu_ctx.registers.z_flag = 0U;
+
+	/* Update CPU flags */
+	if (result > 0xFFFF)	cpu_ctx.registers.c_flag = 1U;
+	if ((uint16_t)((num1 & 0xFF) + (num2 & 0xFF)) > 0xFF)	cpu_ctx.registers.h_flag = 1U;
+	if (result == 0U)	cpu_ctx.registers.z_flag = 1U;
 
 	return (uint16_t)result;
 }
