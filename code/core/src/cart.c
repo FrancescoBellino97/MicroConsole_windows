@@ -109,3 +109,14 @@ uint8_t cart_read(uint16_t address)
 
 	return value_read;
 }
+
+
+/**
+  * @brief	Close the file pointer to ROM
+  * @param  None
+  * @retval None
+  */
+void cart_close()
+{
+	fclose(cart_ctx.memory_pointer);	/*Close file pointer*/
+}

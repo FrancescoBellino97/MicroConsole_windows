@@ -92,6 +92,7 @@ typedef struct
 
 uint8_t cart_init();
 uint8_t cart_read(uint16_t address);
+void cart_close();
 
 
 #endif /* CORE_INC_CART_H_ */
