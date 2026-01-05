@@ -13,7 +13,7 @@
 #include "common.h"
 
 
-cart_context cart_ctx;
+static cart_context cart_ctx;
 
 
 /**

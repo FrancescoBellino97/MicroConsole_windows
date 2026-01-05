@@ -24,7 +24,7 @@ static uint16_t ADD_U16_S8_BIT(uint16_t num1, int8_t num2);
 static uint16_t ADD_U16_U16_BIT(uint16_t num1, uint16_t num2);
 
 
-cpu_context cpu_ctx;
+static cpu_context cpu_ctx;
 
 
 /**
