@@ -64,7 +64,7 @@ DLLS			:=	$(BUILD_DIR)\SDL2.dll \
 
 
 #===============================================================================#
-#								POST-BUILD OPTIONS								#
+#								BUILD OPTIONS									#
 #===============================================================================#
 CC				:=	C:\msys64\ucrt64\bin\gcc
 DLLFLAGS		:=	-lSDL2 -lSDL2_ttf -lfreetype-6 -L$(BUILD_DIR)
