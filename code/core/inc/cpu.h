@@ -113,6 +113,7 @@ uint8_t ADC_U8_U8_BIT(uint8_t num1, uint8_t num2);
 uint8_t ADD_U8_U8_BIT(uint8_t num1, uint8_t num2);
 uint16_t ADD_U16_S8_BIT(uint16_t num1, int8_t num2);
 uint16_t ADD_U16_U16_BIT(uint16_t num1, uint16_t num2);
+uint8_t AND_U8_U8_BIT(uint8_t num1, uint8_t num2);
 #endif
 
 
