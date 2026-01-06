@@ -27,12 +27,12 @@
 #define TYPE_ADD_HL_R16		(7U)
 #define TYPE_ADD_SP_S8		(8U)
 /*AND*/
-#define TYPE_AND_A_R8		(8U)
-#define TYPE_AND_A_HL		(9U)
-#define TYPE_AND_A_U8		(10U)
+#define TYPE_AND_A_R8		(9U)
+#define TYPE_AND_A_HL		(10U)
+#define TYPE_AND_A_U8		(11U)
 
 /*LD*/
-#define LD_R16_U16			(11U)
+#define LD_R16_U16			(12U)
 
 
 typedef struct{
@@ -107,6 +107,8 @@ extern cpu_context cpu_ctx;
 void cpu_init();
 void cpu_run();
 #ifdef UNIT_TEST
+void decode(uint8_t op_code);
+void execute();
 uint8_t ADC_U8_U8_BIT(uint8_t num1, uint8_t num2);
 uint8_t ADD_U8_U8_BIT(uint8_t num1, uint8_t num2);
 uint16_t ADD_U16_S8_BIT(uint16_t num1, int8_t num2);

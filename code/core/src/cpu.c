@@ -15,11 +15,11 @@
 #include "bus.h"
 
 
+#ifndef UNIT_TEST
 static void decode(uint8_t op_code);
 static void execute();
 
 /*Emulated functions*/
-#ifndef UNIT_TEST
 static uint8_t ADC_U8_U8_BIT(uint8_t num1, uint8_t num2);
 static uint8_t ADD_U8_U8_BIT(uint8_t num1, uint8_t num2);
 static uint16_t ADD_U16_S8_BIT(uint16_t num1, int8_t num2);
@@ -157,7 +157,6 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.cycles = 1U;
 		cpu_ctx.instruction.data = cpu_ctx.registers.A;
 		break;
-
 	case 0x88:	/*ADC A,B*/
 		cpu_ctx.instruction.type = TYPE_ADC_A_R8;
 		cpu_ctx.instruction.cycles = 1U;
@@ -228,13 +227,13 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.cycles = 2U;
 		break;
 
-	case 0xE6:	/*AND u8*/
-		cpu_ctx.instruction.type = TYPE_AND_A_U8;
-		break;
-
 	case 0xCE:	/*ADC A,u8*/
 		cpu_ctx.instruction.type = TYPE_ADC_A_U8;
 		cpu_ctx.instruction.cycles = 2U;
+		break;
+
+	case 0xE6:	/*AND u8*/
+		cpu_ctx.instruction.type = TYPE_AND_A_U8;
 		break;
 
 	case 0xE8:	/*ADD SP,s8*/

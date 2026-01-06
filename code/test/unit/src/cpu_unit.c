@@ -8,9 +8,125 @@
  ******************************************************************************
  */
 
+#include <string.h>
 #include "cpu.h"
-#include "cpu_unit.h"
 #include "unity.h"
+#include "cpu_unit.h"
+#include "cpu_unit_defs.h"
+
+
+/** @brief	Unit test of decode() in CPU module */
+void cpu_decode_unit_test()
+{
+	char text_message[100];
+
+	/* Setup cpu context to keep flag equal 0 */
+	cpu_ctx.registers.F = 0x0;
+
+	/* Loop over all operation codes */
+	for (int op_code=0; op_code<=0xFF; op_code++)
+	{
+		sprintf("OP CODE: %d", op_code);
+		TEST_MESSAGE(text_message);
+
+		decode(op_code);	/*Call decode function*/
+
+		/* Check instruction type*/
+		TEST_ASSERT_EQUAL(op_code_to_cycles[op_code].type, cpu_ctx.instruction.type);
+
+		/* Check cycles */
+		TEST_ASSERT_EQUAL(op_code_to_cycles[op_code].cycles, cpu_ctx.instruction.cycles);
+
+		/* If instruction has a condition check also the missing branch condition */
+		switch (op_code)
+		{
+		case 0x20:	/*JR NZ*/
+			cpu_ctx.registers.z_flag = 0x1;
+			decode(op_code);	/*Call decode function*/
+			TEST_ASSERT_EQUAL(op_code_to_cycles[op_code].cycles-1, cpu_ctx.instruction.cycles);
+			break;
+		case 0x28:	/*JR Z*/
+			cpu_ctx.registers.z_flag = 0x1;
+			decode(op_code);	/*Call decode function*/
+			TEST_ASSERT_EQUAL(op_code_to_cycles[op_code].cycles+1, cpu_ctx.instruction.cycles);
+			break;
+		case 0x30:	/*JR NC*/
+			cpu_ctx.registers.c_flag = 0x1;
+			decode(op_code);	/*Call decode function*/
+			TEST_ASSERT_EQUAL(op_code_to_cycles[op_code].cycles-1, cpu_ctx.instruction.cycles);
+			break;
+		case 0x38:	/*JR C*/
+			cpu_ctx.registers.c_flag = 0x1;
+			decode(op_code);	/*Call decode function*/
+			TEST_ASSERT_EQUAL(op_code_to_cycles[op_code].cycles+1, cpu_ctx.instruction.cycles);
+			break;
+		case 0xC0:	/*RET NZ*/
+			cpu_ctx.registers.z_flag = 0x1;
+			decode(op_code);	/*Call decode function*/
+			TEST_ASSERT_EQUAL(op_code_to_cycles[op_code].cycles-3, cpu_ctx.instruction.cycles);
+			break;
+		case 0xC2:	/*JP NZ*/
+			cpu_ctx.registers.z_flag = 0x1;
+			decode(op_code);	/*Call decode function*/
+			TEST_ASSERT_EQUAL(op_code_to_cycles[op_code].cycles-1, cpu_ctx.instruction.cycles);
+			break;
+		case 0xC4:	/*CALL NZ*/
+			cpu_ctx.registers.z_flag = 0x1;
+			decode(op_code);	/*Call decode function*/
+			TEST_ASSERT_EQUAL(op_code_to_cycles[op_code].cycles-3, cpu_ctx.instruction.cycles);
+			break;
+		case 0xC8:	/*RET Z*/
+			cpu_ctx.registers.z_flag = 0x1;
+			decode(op_code);	/*Call decode function*/
+			TEST_ASSERT_EQUAL(op_code_to_cycles[op_code].cycles+3, cpu_ctx.instruction.cycles);
+			break;
+		case 0xCA:	/*JP Z*/
+			cpu_ctx.registers.z_flag = 0x1;
+			decode(op_code);	/*Call decode function*/
+			TEST_ASSERT_EQUAL(op_code_to_cycles[op_code].cycles+1, cpu_ctx.instruction.cycles);
+			break;
+		case 0xCC:	/*CALL Z*/
+			cpu_ctx.registers.z_flag = 0x1;
+			decode(op_code);	/*Call decode function*/
+			TEST_ASSERT_EQUAL(op_code_to_cycles[op_code].cycles+3, cpu_ctx.instruction.cycles);
+			break;
+		case 0xD0:	/*RET NC*/
+			cpu_ctx.registers.c_flag = 0x1;
+			decode(op_code);	/*Call decode function*/
+			TEST_ASSERT_EQUAL(op_code_to_cycles[op_code].cycles-3, cpu_ctx.instruction.cycles);
+			break;
+		case 0xD2:	/*JP NC*/
+			cpu_ctx.registers.c_flag = 0x1;
+			decode(op_code);	/*Call decode function*/
+			TEST_ASSERT_EQUAL(op_code_to_cycles[op_code].cycles-1, cpu_ctx.instruction.cycles);
+			break;
+		case 0xD4:	/*CALL NC*/
+			cpu_ctx.registers.c_flag = 0x1;
+			decode(op_code);	/*Call decode function*/
+			TEST_ASSERT_EQUAL(op_code_to_cycles[op_code].cycles-3, cpu_ctx.instruction.cycles);
+			break;
+		case 0xD8:	/*RET C*/
+			cpu_ctx.registers.c_flag = 0x1;
+			decode(op_code);	/*Call decode function*/
+			TEST_ASSERT_EQUAL(op_code_to_cycles[op_code].cycles+3, cpu_ctx.instruction.cycles);
+			break;
+		case 0xDA:	/*JP C*/
+			cpu_ctx.registers.c_flag = 0x1;
+			decode(op_code);	/*Call decode function*/
+			TEST_ASSERT_EQUAL(op_code_to_cycles[op_code].cycles+1, cpu_ctx.instruction.cycles);
+			break;
+		case 0xDC:	/*CALL C*/
+			cpu_ctx.registers.c_flag = 0x1;
+			decode(op_code);	/*Call decode function*/
+			TEST_ASSERT_EQUAL(op_code_to_cycles[op_code].cycles+3, cpu_ctx.instruction.cycles);
+			break;
+		default:
+			break;
+		}
+
+		cpu_ctx.registers.F = 0x0; /*Reset flags value*/
+	}
+}
 
 
 /** @brief	Unit test of ADC_U8_U8_BIT() in CPU module */
@@ -91,6 +207,7 @@ void cpu_ADD_U16_S8_BIT_unit_test()
 	TEST_ASSERT_EQUAL(0x10, ADD_U16_S8_BIT(0xF, 0x01));
 	TEST_ASSERT_EQUAL(0x20, cpu_ctx.registers.F);		/*Z=0, N=0, H=1, C=0*/
 }
+
 
 /** @brief	Unit test of ADD_U16_U16_BIT() in CPU module */
 void cpu_ADD_U16_U16_BIT_unit_test()

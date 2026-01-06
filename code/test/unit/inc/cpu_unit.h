@@ -11,6 +11,7 @@
 #define TEST_UNIT_INC_CPU_UNIT_H_
 
 
+void cpu_decode_unit_test();
 void cpu_ADC_U8_U8_BIT_unit_test();
 void cpu_ADD_U8_U8_BIT_unit_test();
 void cpu_ADD_U16_S8_BIT_unit_test();
