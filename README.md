@@ -10,6 +10,7 @@ The reference documentation can be found at [PanDocs](https://gbdev.io/pandocs/)
 The project has the following structure:
  - **core**, here there is the application code
  - **lib**, here there are the SDL2 libraries for graphic and audio
+ - **test**, here there are code for unit and time tests
  - **tools**, here there is a memory estimation script
  - **makefile**, this is the main makefile
  
