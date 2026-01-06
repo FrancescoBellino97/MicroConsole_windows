@@ -6,6 +6,7 @@
  * 				- fetch instructions.
  * 				- decode instructions.
  * 				- execute instructions.
+ * 				- emulate CPU operations
  *
  ******************************************************************************
  */
@@ -18,13 +19,19 @@ static void decode(uint8_t op_code);
 static void execute();
 
 /*Emulated functions*/
+#ifndef UNIT_TEST
 static uint8_t ADC_U8_U8_BIT(uint8_t num1, uint8_t num2);
 static uint8_t ADD_U8_U8_BIT(uint8_t num1, uint8_t num2);
 static uint16_t ADD_U16_S8_BIT(uint16_t num1, int8_t num2);
 static uint16_t ADD_U16_U16_BIT(uint16_t num1, uint16_t num2);
+#endif
 
 
+#ifdef UNIT_TEST
+cpu_context cpu_ctx;
+#else
 static cpu_context cpu_ctx;
+#endif
 
 
 /**
@@ -74,7 +81,11 @@ void cpu_run()
   * @param  uint8_t:	op_code to decode
   * @retval None
   */
+#ifdef UNIT_TEST
+void decode(uint8_t op_code)
+#else
 static void decode(uint8_t op_code)
+#endif
 {
 	switch (op_code)
 	{
@@ -221,7 +232,6 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.type = TYPE_AND_A_U8;
 		break;
 
-
 	case 0xCE:	/*ADC A,u8*/
 		cpu_ctx.instruction.type = TYPE_ADC_A_U8;
 		cpu_ctx.instruction.cycles = 2U;
@@ -245,7 +255,11 @@ static void decode(uint8_t op_code)
   * @param  None
   * @retval None
   */
+#ifdef UNIT_TEST
+void execute()
+#else
 static void execute()
+#endif
 {
 	switch(cpu_ctx.instruction.type)
 	{
@@ -359,7 +373,11 @@ static void execute()
   * 		num2:		second number unsigned 8bit
   * @retval uint8_t:	result unsigned 8bit
   */
+#ifdef UNIT_TEST
+uint8_t ADC_U8_U8_BIT(uint8_t num1, uint8_t num2)
+#else
 static uint8_t ADC_U8_U8_BIT(uint8_t num1, uint8_t num2)
+#endif
 {
 	uint16_t result;
 
@@ -386,7 +404,11 @@ static uint8_t ADC_U8_U8_BIT(uint8_t num1, uint8_t num2)
   * 		num2:		second number unsigned 8bit
   * @retval uint8_t:	result unsigned 8bit
   */
+#ifdef UNIT_TEST
+uint8_t ADD_U8_U8_BIT(uint8_t num1, uint8_t num2)
+#else
 static uint8_t ADD_U8_U8_BIT(uint8_t num1, uint8_t num2)
+#endif
 {
 	uint16_t result;
 
@@ -413,7 +435,11 @@ static uint8_t ADD_U8_U8_BIT(uint8_t num1, uint8_t num2)
   * 		num2:		second number signed 8bit
   * @retval uint16_t:	result unsigned 16bit
   */
+#ifdef UNIT_TEST
+uint16_t ADD_U16_S8_BIT(uint16_t num1, int8_t num2)
+#else
 static uint16_t ADD_U16_S8_BIT(uint16_t num1, int8_t num2)
+#endif
 {
 	uint32_t result;
 
@@ -439,7 +465,11 @@ static uint16_t ADD_U16_S8_BIT(uint16_t num1, int8_t num2)
   * 		num2:		second number unsigned 16bit
   * @retval uint16_t:	result unsigned 16bit
   */
+#ifdef UNIT_TEST
+uint16_t ADD_U16_U16_BIT(uint16_t num1, uint16_t num2)
+#else
 static uint16_t ADD_U16_U16_BIT(uint16_t num1, uint16_t num2)
+#endif
 {
 	uint32_t result;
 

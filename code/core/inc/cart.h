@@ -10,6 +10,7 @@
 #ifndef CORE_INC_CART_H_
 #define CORE_INC_CART_H_
 
+
 #include <stdio.h>
 #include <stdint.h>
 
@@ -88,6 +89,11 @@ typedef struct
 	FILE *memory_pointer;		/*Pointer to ROM memory*/
 	uint16_t last_address;		/*Last accessed address*/
 }cart_context;
+
+
+#ifdef UNIT_TEST
+extern cart_context cart_ctx;
+#endif
 
 
 uint8_t cart_init();

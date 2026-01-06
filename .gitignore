@@ -1,4 +1,4 @@
 /.metadata/
 /code/build/*
+/code/test/build/*
 /rom/*
-/test/*

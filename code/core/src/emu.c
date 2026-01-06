@@ -36,6 +36,7 @@ uint8_t emu_init()
 	return ret_val;
 }
 
+
 /**
   * @brief	It runs a cycle of Emulation module
   * @param  None

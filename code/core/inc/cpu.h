@@ -32,8 +32,7 @@
 #define TYPE_AND_A_U8		(10U)
 
 /*LD*/
-#define LD_R16_U16
-
+#define LD_R16_U16			(11U)
 
 
 typedef struct{
@@ -100,8 +99,19 @@ typedef struct{
 }cpu_context;
 
 
+#ifdef UNIT_TEST
+extern cpu_context cpu_ctx;
+#endif
+
+
 void cpu_init();
 void cpu_run();
+#ifdef UNIT_TEST
+uint8_t ADC_U8_U8_BIT(uint8_t num1, uint8_t num2);
+uint8_t ADD_U8_U8_BIT(uint8_t num1, uint8_t num2);
+uint16_t ADD_U16_S8_BIT(uint16_t num1, int8_t num2);
+uint16_t ADD_U16_U16_BIT(uint16_t num1, uint16_t num2);
+#endif
 
 
 #endif /* CORE_INC_CPU_H_ */

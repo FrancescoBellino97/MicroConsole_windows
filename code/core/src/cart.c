@@ -13,7 +13,11 @@
 #include "common.h"
 
 
+#ifdef UNIT_TEST
+cart_context cart_ctx;
+#else
 static cart_context cart_ctx;
+#endif
 
 
 /**
