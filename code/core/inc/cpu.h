@@ -85,7 +85,8 @@ typedef struct{
 		uint8_t type;			/*Type of instruction*/
 		uint8_t cycles;			/*Number of cycle needed by the instruction*/
 		uint16_t data;			/*It depends on the instruction type*/
-		uint8_t reg;			/*Register destination of the instruction*/
+		uint8_t *reg_8bit;		/*Pointer to 8bit register of the instruction*/
+		uint16_t *reg;			/*Pointer to 16bit register of the instruction*/
 		uint8_t condition;		/*Condition used by CALL or JP*/
 	}instruction;
 
