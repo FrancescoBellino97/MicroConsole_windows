@@ -16,6 +16,7 @@ void cpu_ADC_U8_U8_BIT_unit_test();
 void cpu_ADD_U8_U8_BIT_unit_test();
 void cpu_ADD_U16_S8_BIT_unit_test();
 void cpu_ADD_U16_U16_BIT_unit_test();
+void cpu_SUB_U8_U8_BIT_unit_test();
 void cpu_AND_U8_U8_BIT_unit_test();
 
 

@@ -24,6 +24,7 @@ static uint8_t ADC_U8_U8_BIT(uint8_t num1, uint8_t num2);
 static uint8_t ADD_U8_U8_BIT(uint8_t num1, uint8_t num2);
 static uint16_t ADD_U16_S8_BIT(uint16_t num1, int8_t num2);
 static uint16_t ADD_U16_U16_BIT(uint16_t num1, uint16_t num2);
+static uint8_t SUB_U8_U8_BIT(uint8_t num1, uint8_t num2);
 static uint8_t AND_U8_U8_BIT(uint8_t num1, uint8_t num2);
 #endif
 
@@ -197,6 +198,45 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.cycles = 1U;
 		cpu_ctx.instruction.data = cpu_ctx.registers.A;
 		break;
+	case 0x90:	/*SUB B*/
+		cpu_ctx.instruction.type = TYPE_SUB_A_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.data = cpu_ctx.registers.B;
+		break;
+	case 0x91:	/*SUB C*/
+		cpu_ctx.instruction.type = TYPE_SUB_A_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.data = cpu_ctx.registers.C;
+		break;
+	case 0x92:	/*SUB D*/
+		cpu_ctx.instruction.type = TYPE_SUB_A_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.data = cpu_ctx.registers.D;
+		break;
+	case 0x93:	/*SUB E*/
+		cpu_ctx.instruction.type = TYPE_SUB_A_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.data = cpu_ctx.registers.E;
+		break;
+	case 0x94:	/*SUB H*/
+		cpu_ctx.instruction.type = TYPE_SUB_A_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.data = cpu_ctx.registers.H;
+		break;
+	case 0x95:	/*SUB L*/
+		cpu_ctx.instruction.type = TYPE_SUB_A_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.data = cpu_ctx.registers.L;
+		break;
+	case 0x96:	/*SUB HL*/
+		cpu_ctx.instruction.type = TYPE_SUB_A_HL;
+		cpu_ctx.instruction.cycles = 2U;
+		break;
+	case 0x97:	/*SUB A*/
+		cpu_ctx.instruction.type = TYPE_SUB_A_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.data = cpu_ctx.registers.A;
+		break;
 
 	case 0xA0:	/*AND B*/
 		cpu_ctx.instruction.type = TYPE_AND_A_R8;
@@ -246,6 +286,11 @@ static void decode(uint8_t op_code)
 
 	case 0xCE:	/*ADC A,u8*/
 		cpu_ctx.instruction.type = TYPE_ADC_A_U8;
+		cpu_ctx.instruction.cycles = 2U;
+		break;
+
+	case 0xD6:	/*SUB A,u8*/
+		cpu_ctx.instruction.type = TYPE_SUB_A_U8;
 		cpu_ctx.instruction.cycles = 2U;
 		break;
 
@@ -362,6 +407,34 @@ static void execute()
 			cpu_ctx.registers.SP = ADD_U16_S8_BIT(cpu_ctx.registers.SP, cpu_ctx.instruction.data & 0xFF);
 			break;
 		case 1:	/*Fourth cycle do nothing*/
+			break;
+		}
+		break;
+
+	case TYPE_SUB_A_R8:	/*It takes only 1 cycle*/
+		cpu_ctx.registers.A = SUB_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
+		break;
+
+	case TYPE_SUB_A_HL:
+		switch (cpu_ctx.instruction.cycles)
+		{
+		case 2:	/*First cycle read data at address HL*/
+			cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
+			break;
+		case 1:	/*Second cycle perform SUB*/
+			cpu_ctx.registers.A = SUB_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
+			break;
+		}
+		break;
+
+	case TYPE_SUB_A_U8:
+		switch (cpu_ctx.instruction.cycles)
+		{
+		case 2:	/*First cycle read data at address PC*/
+			cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
+			break;
+		case 1:	/*Second cycle perform SUB*/
+			cpu_ctx.registers.A = SUB_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
 			break;
 		}
 		break;
@@ -532,6 +605,37 @@ static uint16_t ADD_U16_U16_BIT(uint16_t num1, uint16_t num2)
 	if (result == 0U)	cpu_ctx.registers.z_flag = 1U;
 
 	return (uint16_t)result;
+}
+
+
+/**
+  * @brief	Execute SUB between unsigned 8bit and unsigned 8bit and update flags
+  * @param  num1:		first number unsigned 8bit
+  * 		num2:		second number unsigned 8bit
+  * @retval uint8_t:	result unsigned 8bit
+  */
+#ifdef UNIT_TEST
+uint8_t SUB_U8_U8_BIT(uint8_t num1, uint8_t num2)
+#else
+static uint8_t SUB_U8_U8_BIT(uint8_t num1, uint8_t num2)
+#endif
+{
+	uint16_t result;
+
+	result = (uint16_t)(num1 - num2);
+
+	/* Reset cpu flags */
+	cpu_ctx.registers.c_flag = 0U;
+	cpu_ctx.registers.h_flag = 0U;
+	cpu_ctx.registers.n_flag = 1U;	/*Always 1*/
+	cpu_ctx.registers.z_flag = 0U;
+
+	/* Update CPU flags */
+	if ((num1 - num2) < 0x0)	cpu_ctx.registers.c_flag = 1U;
+	if (((num1 & 0xF) - (num2 & 0xF)) < 0x0)	cpu_ctx.registers.h_flag = 1U;
+	if (result == 0U)	cpu_ctx.registers.z_flag = 1U;
+
+	return (uint8_t)result;
 }
 
 
