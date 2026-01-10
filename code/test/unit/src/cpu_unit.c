@@ -296,3 +296,24 @@ void cpu_AND_U8_U8_BIT_unit_test()
 	TEST_ASSERT_EQUAL(0x0, AND_U8_U8_BIT(0x55, 0x0));
 	TEST_ASSERT_EQUAL(0xA0, cpu_ctx.registers.F);		/*Z=1, N=0, H=1, C=0*/
 }
+
+
+/** @brief	Unit test of OR_U8_U8_BIT() in CPU module */
+void cpu_OR_U8_U8_BIT_unit_test()
+{
+	TEST_MESSAGE("Normal OR");
+	TEST_ASSERT_EQUAL(0x75, OR_U8_U8_BIT(0x55, 0x20));
+	TEST_ASSERT_EQUAL(0x00, cpu_ctx.registers.F);		/*Z=0, N=0, H=0, C=0*/
+
+	TEST_MESSAGE("OR with 0xFF");
+	TEST_ASSERT_EQUAL(0xFF, OR_U8_U8_BIT(0x55, 0xFF));
+	TEST_ASSERT_EQUAL(0x00, cpu_ctx.registers.F);		/*Z=0, N=0, H=0, C=0*/
+
+	TEST_MESSAGE("OR with 0x00");
+	TEST_ASSERT_EQUAL(0x55, OR_U8_U8_BIT(0x55, 0x0));
+	TEST_ASSERT_EQUAL(0x00, cpu_ctx.registers.F);		/*Z=0, N=0, H=0, C=0*/
+
+	TEST_MESSAGE("OR to set zero flag");
+	TEST_ASSERT_EQUAL(0x0, OR_U8_U8_BIT(0x0, 0x0));
+	TEST_ASSERT_EQUAL(0x80, cpu_ctx.registers.F);		/*Z=1, N=0, H=0, C=0*/
+}

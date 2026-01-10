@@ -16,16 +16,16 @@
 
 /* Instruction type group */
 #define TYPE_NOP			(0U)
-/*ADC*/
-#define TYPE_ADC_A_R8		(1U)
-#define TYPE_ADC_A_HL		(2U)
-#define TYPE_ADC_A_U8		(3U)
 /*ADD*/
-#define TYPE_ADD_A_R8		(4U)
-#define TYPE_ADD_A_HL		(5U)
-#define TYPE_ADD_A_U8		(6U)
-#define TYPE_ADD_HL_R16		(7U)
-#define TYPE_ADD_SP_S8		(8U)
+#define TYPE_ADD_A_R8		(1U)
+#define TYPE_ADD_A_HL		(2U)
+#define TYPE_ADD_A_U8		(3U)
+#define TYPE_ADD_HL_R16		(4U)
+#define TYPE_ADD_SP_S8		(5U)
+/*ADC*/
+#define TYPE_ADC_A_R8		(6U)
+#define TYPE_ADC_A_HL		(7U)
+#define TYPE_ADC_A_U8		(8U)
 /*SUB*/
 #define TYPE_SUB_A_R8		(9U)
 #define TYPE_SUB_A_HL		(10U)
@@ -38,6 +38,10 @@
 #define TYPE_AND_A_R8		(15U)
 #define TYPE_AND_A_HL		(16U)
 #define TYPE_AND_A_U8		(17U)
+/*OR*/
+#define TYPE_OR_A_R8		(18U)
+#define TYPE_OR_A_HL		(19U)
+#define TYPE_OR_A_U8		(20U)
 
 
 typedef struct{
@@ -122,6 +126,7 @@ uint16_t ADD_U16_U16_BIT(uint16_t num1, uint16_t num2);
 uint8_t SUB_U8_U8_BIT(uint8_t num1, uint8_t num2);
 uint8_t SBC_U8_U8_BIT(uint8_t num1, uint8_t num2);
 uint8_t AND_U8_U8_BIT(uint8_t num1, uint8_t num2);
+uint8_t OR_U8_U8_BIT(uint8_t num1, uint8_t num2);
 #endif
 
 

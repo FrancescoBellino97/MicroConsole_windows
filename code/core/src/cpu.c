@@ -27,6 +27,7 @@ static uint16_t ADD_U16_U16_BIT(uint16_t num1, uint16_t num2);
 static uint8_t SUB_U8_U8_BIT(uint8_t num1, uint8_t num2);
 static uint8_t SBC_U8_U8_BIT(uint8_t num1, uint8_t num2);
 static uint8_t AND_U8_U8_BIT(uint8_t num1, uint8_t num2);
+static uint8_t OR_U8_U8_BIT(uint8_t num1, uint8_t num2);
 #endif
 
 
@@ -319,6 +320,46 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.data = cpu_ctx.registers.A;
 		break;
 
+	case 0xB0:	/*OR B*/
+		cpu_ctx.instruction.type = TYPE_OR_A_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.data = cpu_ctx.registers.B;
+		break;
+	case 0xB1:	/*OR C*/
+		cpu_ctx.instruction.type = TYPE_OR_A_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.data = cpu_ctx.registers.C;
+		break;
+	case 0xB2:	/*OR D*/
+		cpu_ctx.instruction.type = TYPE_OR_A_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.data = cpu_ctx.registers.D;
+		break;
+	case 0xB3:	/*OR E*/
+		cpu_ctx.instruction.type = TYPE_OR_A_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.data = cpu_ctx.registers.E;
+		break;
+	case 0xB4:	/*OR H*/
+		cpu_ctx.instruction.type = TYPE_OR_A_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.data = cpu_ctx.registers.H;
+		break;
+	case 0xB5:	/*OR L*/
+		cpu_ctx.instruction.type = TYPE_OR_A_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.data = cpu_ctx.registers.L;
+		break;
+	case 0xB6:	/*OR (HL)*/
+		cpu_ctx.instruction.type = TYPE_OR_A_HL;
+		cpu_ctx.instruction.cycles = 2U;
+		break;
+	case 0xB7:	/*OR A*/
+		cpu_ctx.instruction.type = TYPE_OR_A_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.data = cpu_ctx.registers.A;
+		break;
+
 	case 0xC6:	/*ADD A,u8*/
 		cpu_ctx.instruction.type = TYPE_ADD_A_U8;
 		cpu_ctx.instruction.cycles = 2U;
@@ -349,6 +390,11 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.cycles = 4U;
 		break;
 
+	case 0xF6:	/*OR u8*/
+		cpu_ctx.instruction.type = TYPE_OR_A_U8;
+		cpu_ctx.instruction.cycles = 2U;
+		break;
+
 	default:
 		cpu_ctx.instruction.type = TYPE_NOP;	/*Default case is NOP*/
 		cpu_ctx.instruction.cycles = 1U;
@@ -370,37 +416,11 @@ static void execute()
 {
 	switch(cpu_ctx.instruction.type)
 	{
+	/* NOP */
 	case TYPE_NOP: /*It takes only 1 cycle and do nothing*/
 		break;
 
-	case TYPE_ADC_A_R8:	/*It takes only 1 cycle*/
-		cpu_ctx.registers.A = ADC_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
-		break;
-
-	case TYPE_ADC_A_HL:
-		switch (cpu_ctx.instruction.cycles)
-		{
-		case 2:	/*First cycle read data at address HL*/
-			cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
-			break;
-		case 1:	/*Second cycle perform ADC*/
-			cpu_ctx.registers.A = ADC_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
-			break;
-		}
-		break;
-
-	case TYPE_ADC_A_U8:
-		switch (cpu_ctx.instruction.cycles)
-		{
-		case 2:	/*First cycle read data at address PC*/
-			cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
-			break;
-		case 1:	/*Second cycle perform ADC*/
-			cpu_ctx.registers.A = ADC_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
-			break;
-		}
-		break;
-
+	/* ADD */
 	case TYPE_ADD_A_R8:	/*It takes only 1 cycle*/
 		cpu_ctx.registers.A = ADD_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
 		break;
@@ -455,7 +475,37 @@ static void execute()
 			break;
 		}
 		break;
+		
+	/* ADC */
+	case TYPE_ADC_A_R8:	/*It takes only 1 cycle*/
+		cpu_ctx.registers.A = ADC_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
+		break;
 
+	case TYPE_ADC_A_HL:
+		switch (cpu_ctx.instruction.cycles)
+		{
+		case 2:	/*First cycle read data at address HL*/
+			cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
+			break;
+		case 1:	/*Second cycle perform ADC*/
+			cpu_ctx.registers.A = ADC_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
+			break;
+		}
+		break;
+
+	case TYPE_ADC_A_U8:
+		switch (cpu_ctx.instruction.cycles)
+		{
+		case 2:	/*First cycle read data at address PC*/
+			cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
+			break;
+		case 1:	/*Second cycle perform ADC*/
+			cpu_ctx.registers.A = ADC_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
+			break;
+		}
+		break;
+		
+	/* SUB */
 	case TYPE_SUB_A_R8:	/*It takes only 1 cycle*/
 		cpu_ctx.registers.A = SUB_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
 		break;
@@ -484,6 +534,7 @@ static void execute()
 		}
 		break;
 
+	/* SBC */
 	case TYPE_SBC_A_R8:	/*It takes only 1 cycle*/
 		cpu_ctx.registers.A = SBC_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
 		break;
@@ -512,6 +563,7 @@ static void execute()
 		}
 		break;
 
+	/* AND */
 	case TYPE_AND_A_R8:	/*It takes only 1 cycle*/
 		cpu_ctx.registers.A = AND_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
 		break;
@@ -536,6 +588,35 @@ static void execute()
 			break;
 		case 1:	/*Second cycle perform AND*/
 			cpu_ctx.registers.A = ADD_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
+			break;
+		}
+		break;
+
+	/* OR */
+	case TYPE_OR_A_R8:	/*It takes only 1 cycle*/
+		cpu_ctx.registers.A = OR_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
+		break;
+
+	case TYPE_OR_A_HL:
+		switch (cpu_ctx.instruction.cycles)
+		{
+		case 2:	/*First cycle read data at address HL*/
+			cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
+			break;
+		case 1:	/*Second cycle perform OR*/
+			cpu_ctx.registers.A = OR_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
+			break;
+		}
+		break;
+
+	case TYPE_OR_A_U8:
+		switch (cpu_ctx.instruction.cycles)
+		{
+		case 2:	/*First cycle read data at address PC*/
+			cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
+			break;
+		case 1:	/*Second cycle perform OR*/
+			cpu_ctx.registers.A = OR_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
 			break;
 		}
 		break;
@@ -762,6 +843,35 @@ static uint8_t AND_U8_U8_BIT(uint8_t num1, uint8_t num2)
 	/* Reset cpu flags */
 	cpu_ctx.registers.c_flag = 0U;
 	cpu_ctx.registers.h_flag = 1U;
+	cpu_ctx.registers.n_flag = 0U;
+	cpu_ctx.registers.z_flag = 0U;
+
+	/* Update CPU flags */
+	if (result == 0U)	cpu_ctx.registers.z_flag = 1U;
+
+	return (uint16_t)result;
+}
+
+
+/**
+  * @brief	Execute OR between unsigned 8bit and unsigned 8bit and update flags
+  * @param  num1:		first number unsigned 8bit
+  * 		num2:		second number unsigned 8bit
+  * @retval uint16_t:	result unsigned 8bit
+  */
+#ifdef UNIT_TEST
+uint8_t OR_U8_U8_BIT(uint8_t num1, uint8_t num2)
+#else
+static uint8_t OR_U8_U8_BIT(uint8_t num1, uint8_t num2)
+#endif
+{
+	uint8_t result;
+
+	result = num1 | num2;
+
+	/* Reset cpu flags */
+	cpu_ctx.registers.c_flag = 0U;
+	cpu_ctx.registers.h_flag = 0U;
 	cpu_ctx.registers.n_flag = 0U;
 	cpu_ctx.registers.z_flag = 0U;
 
