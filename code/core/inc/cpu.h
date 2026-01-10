@@ -54,6 +54,10 @@
 #define TYPE_INC_R8			(27U)
 #define TYPE_INC_HL			(28U)
 #define TYPE_INC_R16		(29U)
+/*DEC*/
+#define TYPE_DEC_R8			(30U)
+#define TYPE_DEC_HL			(31U)
+#define TYPE_DEC_R16		(32U)
 
 
 typedef struct{
@@ -142,6 +146,8 @@ uint8_t OR_U8_U8_BIT(uint8_t num1, uint8_t num2);
 uint8_t XOR_U8_U8_BIT(uint8_t num1, uint8_t num2);
 uint8_t INC_U8_BIT(uint8_t num);
 uint16_t INC_U16_BIT(uint16_t num);
+uint8_t DEC_U8_BIT(uint8_t num);
+uint16_t DEC_U16_BIT(uint16_t num);
 #endif
 
 

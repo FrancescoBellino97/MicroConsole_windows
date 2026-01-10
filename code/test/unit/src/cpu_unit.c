@@ -396,3 +396,65 @@ void cpu_INC_U16_BIT_unit_test()
 	TEST_ASSERT_EQUAL(0x40, cpu_ctx.registers.F);		/*Z=1, N=0, H=0, C=0*/
 	cpu_ctx.registers.n_flag = 0U;
 }
+
+
+/** @brief	Unit test of DEC_U8_BIT() in CPU module */
+void cpu_DEC_U8_BIT_unit_test()
+{
+	TEST_MESSAGE("Normal DEC");
+	cpu_ctx.registers.c_flag = 0U;
+	TEST_ASSERT_EQUAL(0x54, DEC_U8_BIT(0x55));
+	TEST_ASSERT_EQUAL(0x00, cpu_ctx.registers.F);		/*Z=0, N=0, H=0, C=0*/
+
+	TEST_MESSAGE("DEC carry check");
+	cpu_ctx.registers.c_flag = 1U;
+	TEST_ASSERT_EQUAL(0x54, DEC_U8_BIT(0x55));
+	TEST_ASSERT_EQUAL(0x10, cpu_ctx.registers.F);		/*Z=0, N=0, H=0, C=1*/
+	cpu_ctx.registers.c_flag = 0U;
+
+	TEST_MESSAGE("DEC with half carry");
+	TEST_ASSERT_EQUAL(0xF, DEC_U8_BIT(0x10));
+	TEST_ASSERT_EQUAL(0x20, cpu_ctx.registers.F);		/*Z=0, N=0, H=1, C=0*/
+
+	TEST_MESSAGE("DEC with half carry 2");
+	TEST_ASSERT_EQUAL(0xFF, DEC_U8_BIT(0x0));
+	TEST_ASSERT_EQUAL(0x20, cpu_ctx.registers.F);		/*Z=0, N=0, H=1, C=0*/
+
+	TEST_MESSAGE("DEC with zero flag");
+	TEST_ASSERT_EQUAL(0x0, DEC_U8_BIT(0x1));
+	TEST_ASSERT_EQUAL(0x80, cpu_ctx.registers.F);		/*Z=1, N=0, H=0, C=0*/
+}
+
+
+/** @brief	Unit test of DEC_U16_BIT() in CPU module */
+void cpu_DEC_U16_BIT_unit_test()
+{
+	TEST_MESSAGE("Normal DEC");
+	cpu_ctx.registers.F = 0U;
+	TEST_ASSERT_EQUAL(0xFFF, DEC_U16_BIT(0x1000));
+	TEST_ASSERT_EQUAL(0x00, cpu_ctx.registers.F);		/*Z=0, N=0, H=0, C=0*/
+
+	TEST_MESSAGE("DEC carry check");
+	cpu_ctx.registers.c_flag = 1U;
+	TEST_ASSERT_EQUAL(0xFFFF, DEC_U16_BIT(0x0));
+	TEST_ASSERT_EQUAL(0x10, cpu_ctx.registers.F);		/*Z=0, N=0, H=0, C=1*/
+	cpu_ctx.registers.c_flag = 0U;
+
+	TEST_MESSAGE("DEC half carry check");
+	cpu_ctx.registers.h_flag = 1U;
+	TEST_ASSERT_EQUAL(0xFFF, DEC_U16_BIT(0x1000));
+	TEST_ASSERT_EQUAL(0x20, cpu_ctx.registers.F);		/*Z=0, N=0, H=1, C=0*/
+	cpu_ctx.registers.h_flag = 0U;
+
+	TEST_MESSAGE("DEC zero flag check");
+	cpu_ctx.registers.z_flag = 1U;
+	TEST_ASSERT_EQUAL(0xFFF, DEC_U16_BIT(0x1000));
+	TEST_ASSERT_EQUAL(0x80, cpu_ctx.registers.F);		/*Z=1, N=0, H=0, C=0*/
+	cpu_ctx.registers.z_flag = 0U;
+
+	TEST_MESSAGE("DEC subtraction flag check");
+	cpu_ctx.registers.n_flag = 1U;
+	TEST_ASSERT_EQUAL(0xFFF, DEC_U16_BIT(0x1000));
+	TEST_ASSERT_EQUAL(0x40, cpu_ctx.registers.F);		/*Z=1, N=0, H=0, C=0*/
+	cpu_ctx.registers.n_flag = 0U;
+}
