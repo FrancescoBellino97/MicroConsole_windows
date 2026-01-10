@@ -42,6 +42,10 @@
 #define TYPE_OR_A_R8		(18U)
 #define TYPE_OR_A_HL		(19U)
 #define TYPE_OR_A_U8		(20U)
+/*XOR*/
+#define TYPE_XOR_A_R8		(21U)
+#define TYPE_XOR_A_HL		(22U)
+#define TYPE_XOR_A_U8		(23U)
 
 
 typedef struct{
@@ -127,6 +131,7 @@ uint8_t SUB_U8_U8_BIT(uint8_t num1, uint8_t num2);
 uint8_t SBC_U8_U8_BIT(uint8_t num1, uint8_t num2);
 uint8_t AND_U8_U8_BIT(uint8_t num1, uint8_t num2);
 uint8_t OR_U8_U8_BIT(uint8_t num1, uint8_t num2);
+uint8_t XOR_U8_U8_BIT(uint8_t num1, uint8_t num2);
 #endif
 
 

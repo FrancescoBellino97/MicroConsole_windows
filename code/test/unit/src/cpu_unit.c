@@ -317,3 +317,24 @@ void cpu_OR_U8_U8_BIT_unit_test()
 	TEST_ASSERT_EQUAL(0x0, OR_U8_U8_BIT(0x0, 0x0));
 	TEST_ASSERT_EQUAL(0x80, cpu_ctx.registers.F);		/*Z=1, N=0, H=0, C=0*/
 }
+
+
+/** @brief	Unit test of XOR_U8_U8_BIT() in CPU module */
+void cpu_XOR_U8_U8_BIT_unit_test()
+{
+	TEST_MESSAGE("Normal XOR");
+	TEST_ASSERT_EQUAL(0x75, XOR_U8_U8_BIT(0x55, 0x20));
+	TEST_ASSERT_EQUAL(0x00, cpu_ctx.registers.F);		/*Z=0, N=0, H=0, C=0*/
+
+	TEST_MESSAGE("XOR with 0xFF");
+	TEST_ASSERT_EQUAL(0xAA, XOR_U8_U8_BIT(0x55, 0xFF));
+	TEST_ASSERT_EQUAL(0x00, cpu_ctx.registers.F);		/*Z=0, N=0, H=0, C=0*/
+
+	TEST_MESSAGE("XOR with 0x00");
+	TEST_ASSERT_EQUAL(0x55, XOR_U8_U8_BIT(0x55, 0x0));
+	TEST_ASSERT_EQUAL(0x00, cpu_ctx.registers.F);		/*Z=0, N=0, H=0, C=0*/
+
+	TEST_MESSAGE("XOR to set zero flag");
+	TEST_ASSERT_EQUAL(0x0, XOR_U8_U8_BIT(0x55, 0x55));
+	TEST_ASSERT_EQUAL(0x80, cpu_ctx.registers.F);		/*Z=1, N=0, H=0, C=0*/
+}
