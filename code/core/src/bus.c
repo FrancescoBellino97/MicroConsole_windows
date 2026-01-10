@@ -31,3 +31,17 @@ uint8_t bus_read(uint16_t address)
 
 	return read_val;
 }
+
+
+/**
+  * @brief	Write a data at specific address
+  * @param  uint16_t:	address to access
+  * 		uint8_t:	value to write
+  * @retval None
+  */
+void bus_write(uint16_t address, uint8_t value)
+{
+	(void)address;
+	(void)value;
+	/*To be implemented...*/
+}
