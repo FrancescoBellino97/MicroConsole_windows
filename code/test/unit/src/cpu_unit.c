@@ -233,7 +233,7 @@ void cpu_ADD_U16_U16_BIT_unit_test()
 /** @brief	Unit test of SUB_U8_U8_BIT() in CPU module */
 void cpu_SUB_U8_U8_BIT_unit_test()
 {
-	TEST_MESSAGE("Normal sub");
+	TEST_MESSAGE("Normal SUB");
 	TEST_ASSERT_EQUAL(0x3, SUB_U8_U8_BIT(0x5, 0x2));
 	TEST_ASSERT_EQUAL(0x40, cpu_ctx.registers.F);		/*Z=0, N=1, H=0, C=0*/
 
@@ -245,8 +245,38 @@ void cpu_SUB_U8_U8_BIT_unit_test()
 	TEST_ASSERT_EQUAL(0xF, SUB_U8_U8_BIT(0x10, 0x01));
 	TEST_ASSERT_EQUAL(0x60, cpu_ctx.registers.F);		/*Z=0, N=1, H=1, C=0*/
 
-	TEST_MESSAGE("Normal ADD with zero");
+	TEST_MESSAGE("Normal SUB with zero");
 	TEST_ASSERT_EQUAL(0x0, SUB_U8_U8_BIT(0x10, 0x10));
+	TEST_ASSERT_EQUAL(0xC0, cpu_ctx.registers.F);		/*Z=1, N=1, H=0, C=0*/
+}
+
+
+/** @brief	Unit test of SUB_U8_U8_BIT() in CPU module */
+void cpu_SBC_U8_U8_BIT_unit_test()
+{
+	TEST_MESSAGE("Normal SBC");
+	cpu_ctx.registers.c_flag = 0U;
+	TEST_ASSERT_EQUAL(0x3, SBC_U8_U8_BIT(0x5, 0x2));
+	TEST_ASSERT_EQUAL(0x40, cpu_ctx.registers.F);		/*Z=0, N=1, H=0, C=0*/
+
+	TEST_MESSAGE("Normal SBC with carry=1");
+	cpu_ctx.registers.c_flag = 1;
+	TEST_ASSERT_EQUAL(0x2, SBC_U8_U8_BIT(0x5, 0x2));
+	TEST_ASSERT_EQUAL(0x40, cpu_ctx.registers.F);		/*Z=0, N=1, H=0, C=0*/
+
+	TEST_MESSAGE("Normal SBC with carry");
+	cpu_ctx.registers.c_flag = 0U;
+	TEST_ASSERT_EQUAL(0xF0, SBC_U8_U8_BIT(0x20, 0x30));
+	TEST_ASSERT_EQUAL(0x50, cpu_ctx.registers.F);		/*Z=0, N=1, H=0, C=1*/
+
+	TEST_MESSAGE("Normal SBC with half-carry");
+	cpu_ctx.registers.c_flag = 0U;
+	TEST_ASSERT_EQUAL(0xF, SBC_U8_U8_BIT(0x10, 0x01));
+	TEST_ASSERT_EQUAL(0x60, cpu_ctx.registers.F);		/*Z=0, N=1, H=1, C=0*/
+
+	TEST_MESSAGE("Normal SBC with zero");
+	cpu_ctx.registers.c_flag = 0U;
+	TEST_ASSERT_EQUAL(0x0, SBC_U8_U8_BIT(0x10, 0x10));
 	TEST_ASSERT_EQUAL(0xC0, cpu_ctx.registers.F);		/*Z=1, N=1, H=0, C=0*/
 }
 

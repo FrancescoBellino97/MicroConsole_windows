@@ -181,14 +181,14 @@ typedef struct
 //		[0x95] = {TYPE_SUB_A_R8, 1},
 //		[0x96] = {TYPE_SUB_A_hl, 2},
 //		[0x97] = {TYPE_SUB_A_R8, 1},
-//		[0x98] = 1,
-//		[0x99] = 1,
-//		[0x9A] = 1,
-//		[0x9B] = 1,
-//		[0x9C] = 1,
-//		[0x9D] = 1,
-//		[0x9E] = 2,
-//		[0x9F] = 1,
+//		[0x98] = {TYPE_SBC_A_R8, 1},
+//		[0x99] = {TYPE_SBC_A_R8, 1},
+//		[0x9A] = {TYPE_SBC_A_R8, 1},
+//		[0x9B] = {TYPE_SBC_A_R8, 1},
+//		[0x9C] = {TYPE_SBC_A_R8, 1},
+//		[0x9D] = {TYPE_SBC_A_R8, 1},
+//		[0x9E] = {TYPE_SBC_A_HL, 2},
+//		[0x9F] = {TYPE_SBC_A_R8, 1},
 //
 //		[0xA0] = {TYPE_AND_A_R8, 1},
 //		[0xA1] = {TYPE_AND_A_R8, 1},
@@ -252,26 +252,26 @@ typedef struct
 //		[0xD8] = 2,
 //		[0xD9] = 4,
 //		[0xDA] = 3,
-//		[0xDB] = 1,	/*NOP because is not supported*/
+//		[0xDB] = {TYPE_NOP, 1},		/*NOP because is not supported*/
 //		[0xDC] = 3,
-//		[0xDD] = 1,	/*NOP because is not supported*/
-//		[0xDE] = 2,
+//		[0xDD] = {TYPE_NOP, 1},		/*NOP because is not supported*/
+//		[0xDE] = {TYPE_SBC_A_U8, 2},
 //		[0xDF] = 4,
 //
 //		[0xE0] = 3,
 //		[0xE1] = 3,
 //		[0xE2] = 2,
-//		[0xE3] = 1,	/*NOP because is not supported*/
-//		[0xE4] = 1,	/*NOP because is not supported*/
+//		[0xE3] = {TYPE_NOP, 1},		/*NOP because is not supported*/
+//		[0xE4] = {TYPE_NOP, 1},		/*NOP because is not supported*/
 //		[0xE5] = 4,
 //		[0xE6] = {TYPE_AND_A_U8, 2},
 //		[0xE7] = 4,
 //		[0xE8] = {TYPE_ADD_SP_S8, 4},
 //		[0xE9] = 1,
 //		[0xEA] = 4,
-//		[0xEB] = 1,	/*NOP because is not supported*/
-//		[0xEC] = 1,	/*NOP because is not supported*/
-//		[0xED] = 1,	/*NOP because is not supported*/
+//		[0xEB] = {TYPE_NOP, 1},		/*NOP because is not supported*/
+//		[0xEC] = {TYPE_NOP, 1},		/*NOP because is not supported*/
+//		[0xED] = {TYPE_NOP, 1},		/*NOP because is not supported*/
 //		[0xEE] = 2,
 //		[0xEF] = 4,
 //
@@ -279,7 +279,7 @@ typedef struct
 //		[0xF1] = 3,
 //		[0xF2] = 2,
 //		[0xF3] = 1,
-//		[0xF4] = 1,	/*NOP because is not supported*/
+//		[0xF4] = {TYPE_NOP, 1},		/*NOP because is not supported*/
 //		[0xF5] = 4,
 //		[0xF6] = 2,
 //		[0xF7] = 4,
@@ -287,8 +287,8 @@ typedef struct
 //		[0xF9] = 2,
 //		[0xFA] = 4,
 //		[0xFB] = 1,
-//		[0xFC] = 1,	/*NOP because is not supported*/
-//		[0xFD] = 1,	/*NOP because is not supported*/
+//		[0xFC] = {TYPE_NOP, 1},		/*NOP because is not supported*/
+//		[0xFD] = {TYPE_NOP, 1},		/*NOP because is not supported*/
 //		[0xFE] = 2,
 //		[0xFF] = 4,
 //};

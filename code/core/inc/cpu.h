@@ -30,13 +30,14 @@
 #define TYPE_SUB_A_R8		(9U)
 #define TYPE_SUB_A_HL		(10U)
 #define TYPE_SUB_A_U8		(11U)
+/*SBC*/
+#define TYPE_SBC_A_R8		(12U)
+#define TYPE_SBC_A_HL		(13U)
+#define TYPE_SBC_A_U8		(14U)
 /*AND*/
-#define TYPE_AND_A_R8		(12U)
-#define TYPE_AND_A_HL		(13U)
-#define TYPE_AND_A_U8		(14U)
-
-/*LD*/
-#define LD_R16_U16			(15U)
+#define TYPE_AND_A_R8		(15U)
+#define TYPE_AND_A_HL		(16U)
+#define TYPE_AND_A_U8		(17U)
 
 
 typedef struct{
@@ -119,6 +120,7 @@ uint8_t ADD_U8_U8_BIT(uint8_t num1, uint8_t num2);
 uint16_t ADD_U16_S8_BIT(uint16_t num1, int8_t num2);
 uint16_t ADD_U16_U16_BIT(uint16_t num1, uint16_t num2);
 uint8_t SUB_U8_U8_BIT(uint8_t num1, uint8_t num2);
+uint8_t SBC_U8_U8_BIT(uint8_t num1, uint8_t num2);
 uint8_t AND_U8_U8_BIT(uint8_t num1, uint8_t num2);
 #endif
 
