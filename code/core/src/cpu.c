@@ -29,6 +29,8 @@ static uint8_t SBC_U8_U8_BIT(uint8_t num1, uint8_t num2);
 static uint8_t AND_U8_U8_BIT(uint8_t num1, uint8_t num2);
 static uint8_t OR_U8_U8_BIT(uint8_t num1, uint8_t num2);
 static uint8_t XOR_U8_U8_BIT(uint8_t num1, uint8_t num2);
+static uint8_t INC_U8_BIT(uint8_t num);
+static uint16_t INC_U16_BIT(uint16_t num);
 #endif
 
 
@@ -99,10 +101,38 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.cycles = 1U;
 		break;
 
+	case 0x03:	/*INC BC*/
+		cpu_ctx.instruction.type = TYPE_INC_R16;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.reg_16bit = &cpu_ctx.registers.BC;
+		break;
+	case 0x04:	/*INC B*/
+		cpu_ctx.instruction.type = TYPE_INC_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.B;
+		break;
+
 	case 0x09:	/*ADD HL,BC*/
 		cpu_ctx.instruction.type = TYPE_ADD_HL_R16;
 		cpu_ctx.instruction.cycles = 2U;
 		cpu_ctx.instruction.data = cpu_ctx.registers.BC;
+		break;
+
+	case 0x0C:	/*INC C*/
+		cpu_ctx.instruction.type = TYPE_INC_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.C;
+		break;
+
+	case 0x13:	/*INC DE*/
+		cpu_ctx.instruction.type = TYPE_INC_R16;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.reg_16bit = &cpu_ctx.registers.DE;
+		break;
+	case 0x14:	/*INC D*/
+		cpu_ctx.instruction.type = TYPE_INC_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.D;
 		break;
 
 	case 0x19:	/*ADD HL,DE*/
@@ -111,16 +141,55 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.data = cpu_ctx.registers.DE;
 		break;
 
+	case 0x1C:	/*INC E*/
+		cpu_ctx.instruction.type = TYPE_INC_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.E;
+		break;
+
+	case 0x23:	/*INC HL*/
+		cpu_ctx.instruction.type = TYPE_INC_R16;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.reg_16bit = &cpu_ctx.registers.HL;
+		break;
+	case 0x24:	/*INC H*/
+		cpu_ctx.instruction.type = TYPE_INC_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.H;
+		break;
+
 	case 0x29:	/*ADD HL,HL*/
 		cpu_ctx.instruction.type = TYPE_ADD_HL_R16;
 		cpu_ctx.instruction.cycles = 2U;
 		cpu_ctx.instruction.data = cpu_ctx.registers.HL;
 		break;
 
+	case 0x2C:	/*INC L*/
+		cpu_ctx.instruction.type = TYPE_INC_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.L;
+		break;
+
+	case 0x33:	/*INC SP*/
+		cpu_ctx.instruction.type = TYPE_INC_R16;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.reg_16bit = &cpu_ctx.registers.SP;
+		break;
+	case 0x34:	/*INC (HL)*/
+		cpu_ctx.instruction.type = TYPE_INC_HL;
+		cpu_ctx.instruction.cycles = 3U;
+		break;
+
 	case 0x39:	/*ADD HL,SP*/
 		cpu_ctx.instruction.type = TYPE_ADD_HL_R16;
 		cpu_ctx.instruction.cycles = 2U;
 		cpu_ctx.instruction.data = cpu_ctx.registers.SP;
+		break;
+
+	case 0x3C:	/*INC A*/
+		cpu_ctx.instruction.type = TYPE_INC_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.A;
 		break;
 
 	case 0x80:	/*ADD A,B*/
@@ -767,6 +836,37 @@ static void execute()
 		}
 		break;
 
+	/* INC */
+	case TYPE_INC_R8:	/*It takes only 1 cycle*/
+		*cpu_ctx.instruction.reg_8bit = INC_U8_BIT(*cpu_ctx.instruction.reg_8bit);
+		break;
+
+	case TYPE_INC_HL:
+		switch (cpu_ctx.instruction.cycles)
+		{
+		case 3:	/*First cycle read data at address HL*/
+			cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
+			break;
+		case 2:	/*Second cycle perform INC*/
+			cpu_ctx.instruction.data = INC_U8_BIT(cpu_ctx.instruction.data);
+			break;
+		case 1:	/*Third cycle write value at address HL*/
+			bus_write(cpu_ctx.registers.HL, cpu_ctx.instruction.data);
+			break;
+		}
+		break;
+
+	case TYPE_INC_R16:
+		switch (cpu_ctx.instruction.cycles)
+		{
+		case 2:	/*First cycle perform INC*/
+			*cpu_ctx.instruction.reg_16bit = INC_U16_BIT(*cpu_ctx.instruction.reg_16bit);
+			break;
+		case 1:	/*Second cycle do nothing*/
+			break;
+		}
+		break;
+
 	default:
 		break;
 	}
@@ -974,7 +1074,7 @@ static uint8_t SBC_U8_U8_BIT(uint8_t num1, uint8_t num2)
   * @brief	Execute AND between unsigned 8bit and unsigned 8bit and update flags
   * @param  num1:		first number unsigned 8bit
   * 		num2:		second number unsigned 8bit
-  * @retval uint16_t:	result unsigned 8bit
+  * @retval uint8_t:	result unsigned 8bit
   */
 #ifdef UNIT_TEST
 uint8_t AND_U8_U8_BIT(uint8_t num1, uint8_t num2)
@@ -1003,7 +1103,7 @@ static uint8_t AND_U8_U8_BIT(uint8_t num1, uint8_t num2)
   * @brief	Execute OR between unsigned 8bit and unsigned 8bit and update flags
   * @param  num1:		first number unsigned 8bit
   * 		num2:		second number unsigned 8bit
-  * @retval uint16_t:	result unsigned 8bit
+  * @retval uint8_t:	result unsigned 8bit
   */
 #ifdef UNIT_TEST
 uint8_t OR_U8_U8_BIT(uint8_t num1, uint8_t num2)
@@ -1032,7 +1132,7 @@ static uint8_t OR_U8_U8_BIT(uint8_t num1, uint8_t num2)
   * @brief	Execute XOR between unsigned 8bit and unsigned 8bit and update flags
   * @param  num1:		first number unsigned 8bit
   * 		num2:		second number unsigned 8bit
-  * @retval uint16_t:	result unsigned 8bit
+  * @retval uint8_t:	result unsigned 8bit
   */
 #ifdef UNIT_TEST
 uint8_t XOR_U8_U8_BIT(uint8_t num1, uint8_t num2)
@@ -1054,4 +1154,51 @@ static uint8_t XOR_U8_U8_BIT(uint8_t num1, uint8_t num2)
 	if (result == 0U)	cpu_ctx.registers.z_flag = 1U;
 
 	return (uint16_t)result;
+}
+
+
+/**
+  * @brief	Execute INC on unsigned 8bit and update flags
+  * @param  num:		number unsigned 8bit
+  * @retval uint8_t:	result unsigned 8bit
+  */
+#ifdef UNIT_TEST
+uint8_t INC_U8_BIT(uint8_t num)
+#else
+static uint8_t INC_U8_BIT(uint8_t num)
+#endif
+{
+	uint16_t result;
+
+	result = (uint16_t)(num + 1);
+
+	/* Reset cpu flags */
+	cpu_ctx.registers.h_flag = 0U;
+	cpu_ctx.registers.n_flag = 0U;
+	cpu_ctx.registers.z_flag = 0U;
+
+	/* Update CPU flags */
+	if ((uint8_t)result == 0U)	cpu_ctx.registers.z_flag = 1U;
+	if ((num & 0xF) == 0xF)	cpu_ctx.registers.h_flag = 1U;
+
+	return (uint8_t) result;
+}
+
+
+/**
+  * @brief	Execute INC on unsigned 16bit (don't update flags)
+  * @param  num:		number unsigned 16bit
+  * @retval uint8_t:	result unsigned 16bit
+  */
+#ifdef UNIT_TEST
+uint16_t INC_U16_BIT(uint16_t num)
+#else
+static uint16_t INC_U16_BIT(uint16_t num)
+#endif
+{
+	uint32_t result;
+
+	result = (uint32_t)(num + 1);
+
+	return (uint16_t) result;
 }

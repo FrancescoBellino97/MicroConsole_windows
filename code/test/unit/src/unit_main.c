@@ -33,6 +33,8 @@ int main(void)
 	RUN_TEST(cpu_SBC_U8_U8_BIT_unit_test);
 	RUN_TEST(cpu_OR_U8_U8_BIT_unit_test);
 	RUN_TEST(cpu_XOR_U8_U8_BIT_unit_test);
+	RUN_TEST(cpu_INC_U8_BIT_unit_test);
+	RUN_TEST(cpu_INC_U16_BIT_unit_test);
 
 	return UNITY_END();		/*End Unit Tests Framework*/
 }

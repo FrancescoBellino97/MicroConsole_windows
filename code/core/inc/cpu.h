@@ -50,6 +50,10 @@
 #define TYPE_CP_A_R8		(24U)
 #define TYPE_CP_A_HL		(25U)
 #define TYPE_CP_A_U8		(26U)
+/*INC*/
+#define TYPE_INC_R8			(27U)
+#define TYPE_INC_HL			(28U)
+#define TYPE_INC_R16		(29U)
 
 
 typedef struct{
@@ -103,7 +107,7 @@ typedef struct{
 		uint8_t cycles;			/*Number of cycle needed by the instruction*/
 		uint16_t data;			/*It depends on the instruction type*/
 		uint8_t *reg_8bit;		/*Pointer to 8bit register of the instruction*/
-		uint16_t *reg;			/*Pointer to 16bit register of the instruction*/
+		uint16_t *reg_16bit;	/*Pointer to 16bit register of the instruction*/
 		uint8_t condition;		/*Condition used by CALL or JP*/
 	}instruction;
 
@@ -136,6 +140,8 @@ uint8_t SBC_U8_U8_BIT(uint8_t num1, uint8_t num2);
 uint8_t AND_U8_U8_BIT(uint8_t num1, uint8_t num2);
 uint8_t OR_U8_U8_BIT(uint8_t num1, uint8_t num2);
 uint8_t XOR_U8_U8_BIT(uint8_t num1, uint8_t num2);
+uint8_t INC_U8_BIT(uint8_t num);
+uint16_t INC_U16_BIT(uint16_t num);
 #endif
 
 

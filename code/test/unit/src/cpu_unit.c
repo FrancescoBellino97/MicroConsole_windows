@@ -338,3 +338,61 @@ void cpu_XOR_U8_U8_BIT_unit_test()
 	TEST_ASSERT_EQUAL(0x0, XOR_U8_U8_BIT(0x55, 0x55));
 	TEST_ASSERT_EQUAL(0x80, cpu_ctx.registers.F);		/*Z=1, N=0, H=0, C=0*/
 }
+
+
+/** @brief	Unit test of INC_U8_BIT() in CPU module */
+void cpu_INC_U8_BIT_unit_test()
+{
+	TEST_MESSAGE("Normal INC");
+	cpu_ctx.registers.c_flag = 0U;
+	TEST_ASSERT_EQUAL(0x56, INC_U8_BIT(0x55));
+	TEST_ASSERT_EQUAL(0x00, cpu_ctx.registers.F);		/*Z=0, N=0, H=0, C=0*/
+
+	TEST_MESSAGE("INC carry check");
+	cpu_ctx.registers.c_flag = 1U;
+	TEST_ASSERT_EQUAL(0x56, INC_U8_BIT(0x55));
+	TEST_ASSERT_EQUAL(0x10, cpu_ctx.registers.F);		/*Z=0, N=0, H=0, C=1*/
+	cpu_ctx.registers.c_flag = 0U;
+
+	TEST_MESSAGE("INC with half carry");
+	TEST_ASSERT_EQUAL(0x10, INC_U8_BIT(0xF));
+	TEST_ASSERT_EQUAL(0x20, cpu_ctx.registers.F);		/*Z=0, N=0, H=1, C=0*/
+
+	TEST_MESSAGE("INC with zero flag");
+	TEST_ASSERT_EQUAL(0x0, INC_U8_BIT(0xFF));
+	TEST_ASSERT_EQUAL(0xA0, cpu_ctx.registers.F);		/*Z=1, N=0, H=1, C=0*/
+}
+
+
+/** @brief	Unit test of INC_U16_BIT() in CPU module */
+void cpu_INC_U16_BIT_unit_test()
+{
+	TEST_MESSAGE("Normal INC");
+	cpu_ctx.registers.F = 0U;
+	TEST_ASSERT_EQUAL(0x1000, INC_U16_BIT(0xFFF));
+	TEST_ASSERT_EQUAL(0x00, cpu_ctx.registers.F);		/*Z=0, N=0, H=0, C=0*/
+
+	TEST_MESSAGE("INC carry check");
+	cpu_ctx.registers.c_flag = 1U;
+	TEST_ASSERT_EQUAL(0x1000, INC_U16_BIT(0xFFF));
+	TEST_ASSERT_EQUAL(0x10, cpu_ctx.registers.F);		/*Z=0, N=0, H=0, C=1*/
+	cpu_ctx.registers.c_flag = 0U;
+
+	TEST_MESSAGE("INC half carry check");
+	cpu_ctx.registers.h_flag = 1U;
+	TEST_ASSERT_EQUAL(0x0, INC_U16_BIT(0xFFFF));
+	TEST_ASSERT_EQUAL(0x20, cpu_ctx.registers.F);		/*Z=0, N=0, H=1, C=0*/
+	cpu_ctx.registers.h_flag = 0U;
+
+	TEST_MESSAGE("INC zero flag check");
+	cpu_ctx.registers.z_flag = 1U;
+	TEST_ASSERT_EQUAL(0x1000, INC_U16_BIT(0xFFF));
+	TEST_ASSERT_EQUAL(0x80, cpu_ctx.registers.F);		/*Z=1, N=0, H=0, C=0*/
+	cpu_ctx.registers.z_flag = 0U;
+
+	TEST_MESSAGE("INC subtraction flag check");
+	cpu_ctx.registers.n_flag = 1U;
+	TEST_ASSERT_EQUAL(0x1000, INC_U16_BIT(0xFFF));
+	TEST_ASSERT_EQUAL(0x40, cpu_ctx.registers.F);		/*Z=1, N=0, H=0, C=0*/
+	cpu_ctx.registers.n_flag = 0U;
+}
