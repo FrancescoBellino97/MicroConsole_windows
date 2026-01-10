@@ -46,6 +46,10 @@
 #define TYPE_XOR_A_R8		(21U)
 #define TYPE_XOR_A_HL		(22U)
 #define TYPE_XOR_A_U8		(23U)
+/*CP*/
+#define TYPE_CP_A_R8		(24U)
+#define TYPE_CP_A_HL		(25U)
+#define TYPE_CP_A_U8		(26U)
 
 
 typedef struct{
