@@ -253,6 +253,302 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.A;
 		break;
 
+	case 0x40:	/*LD B,B*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.B;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.B;			/*Source*/
+		break;
+	case 0x41:	/*LD B,C*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.B;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.C;			/*Source*/
+		break;
+	case 0x42:	/*LD B,D*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.B;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.D;			/*Source*/
+		break;
+	case 0x43:	/*LD B,E*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.B;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.E;			/*Source*/
+		break;
+	case 0x44:	/*LD B,H*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.B;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.H;			/*Source*/
+		break;
+	case 0x45:	/*LD B,L*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.B;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.L;			/*Source*/
+		break;
+	case 0x47:	/*LD B,A*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.B;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.A;			/*Source*/
+		break;
+	case 0x48:	/*LD C,B*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.C;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.B;			/*Source*/
+		break;
+	case 0x49:	/*LD C,C*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.C;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.C;			/*Source*/
+		break;
+	case 0x4A:	/*LD C,D*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.C;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.D;			/*Source*/
+		break;
+	case 0x4B:	/*LD C,E*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.C;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.E;			/*Source*/
+		break;
+	case 0x4C:	/*LD C,H*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.C;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.H;			/*Source*/
+		break;
+	case 0x4D:	/*LD C,L*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.C;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.L;			/*Source*/
+		break;
+	case 0x4F:	/*LD C,A*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.C;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.A;			/*Source*/
+		break;
+	case 0x50:	/*LD D,B*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.D;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.B;			/*Source*/
+		break;
+	case 0x51:	/*LD D,C*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.D;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.C;			/*Source*/
+		break;
+	case 0x52:	/*LD D,D*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.D;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.D;			/*Source*/
+		break;
+	case 0x53:	/*LD D,E*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.D;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.E;			/*Source*/
+		break;
+	case 0x54:	/*LD D,H*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.D;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.H;			/*Source*/
+		break;
+	case 0x55:	/*LD D,L*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.D;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.L;			/*Source*/
+		break;
+	case 0x57:	/*LD D,A*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.D;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.A;			/*Source*/
+		break;
+	case 0x58:	/*LD E,B*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.E;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.B;			/*Source*/
+		break;
+	case 0x59:	/*LD E,C*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.E;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.C;			/*Source*/
+		break;
+	case 0x5A:	/*LD E,D*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.E;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.D;			/*Source*/
+		break;
+	case 0x5B:	/*LD E,E*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.E;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.E;			/*Source*/
+		break;
+	case 0x5C:	/*LD E,H*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.E;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.H;			/*Source*/
+		break;
+	case 0x5D:	/*LD E,L*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.E;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.L;			/*Source*/
+		break;
+	case 0x5F:	/*LD E,A*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.E;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.A;			/*Source*/
+		break;
+	case 0x60:	/*LD H,B*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.H;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.B;			/*Source*/
+		break;
+	case 0x61:	/*LD H,C*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.H;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.C;			/*Source*/
+		break;
+	case 0x62:	/*LD H,D*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.H;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.D;			/*Source*/
+		break;
+	case 0x63:	/*LD H,E*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.H;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.E;			/*Source*/
+		break;
+	case 0x64:	/*LD H,H*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.H;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.H;			/*Source*/
+		break;
+	case 0x65:	/*LD H,L*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.H;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.L;			/*Source*/
+		break;
+	case 0x67:	/*LD H,A*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.H;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.A;			/*Source*/
+		break;
+	case 0x68:	/*LD L,B*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.L;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.B;			/*Source*/
+		break;
+	case 0x69:	/*LD L,C*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.L;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.C;			/*Source*/
+		break;
+	case 0x6A:	/*LD L,D*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.L;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.D;			/*Source*/
+		break;
+	case 0x6B:	/*LD L,E*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.L;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.E;			/*Source*/
+		break;
+	case 0x6C:	/*LD L,H*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.L;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.H;			/*Source*/
+		break;
+	case 0x6D:	/*LD L,L*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.L;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.L;			/*Source*/
+		break;
+	case 0x6F:	/*LD L,A*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.L;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.A;			/*Source*/
+		break;
+
+	case 0x78:	/*LD A,B*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.A;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.B;			/*Source*/
+		break;
+	case 0x79:	/*LD A,C*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.A;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.C;			/*Source*/
+		break;
+	case 0x7A:	/*LD A,D*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.A;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.D;			/*Source*/
+		break;
+	case 0x7B:	/*LD A,E*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.A;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.E;			/*Source*/
+		break;
+	case 0x7C:	/*LD A,H*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.A;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.H;			/*Source*/
+		break;
+	case 0x7D:	/*LD A,L*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.A;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.L;			/*Source*/
+		break;
+	case 0x7F:	/*LD A,A*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
+		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.A;	/*Destination*/
+		cpu_ctx.instruction.data = cpu_ctx.registers.A;			/*Source*/
+		break;
+
 	case 0x80:	/*ADD A,B*/
 		cpu_ctx.instruction.type = TYPE_ADD_A_R8;
 		cpu_ctx.instruction.cycles = 1U;
@@ -957,6 +1253,11 @@ static void execute()
 		case 1:	/*Second cycle do nothing*/
 			break;
 		}
+		break;
+
+	/* LD */
+	case TYPE_LD_R8_R8:	/*It takes only 1 cycle*/
+		*cpu_ctx.instruction.reg_8bit = cpu_ctx.instruction.data;
 		break;
 
 	default:
