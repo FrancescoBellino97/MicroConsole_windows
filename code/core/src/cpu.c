@@ -1181,7 +1181,7 @@ static void execute()
 		cpu_ctx.instruction.cycles--;
 	}
 
-	/* Enable fetch when execute is ended */
+	/* Enable fetch when execute ended */
 	if (cpu_ctx.instruction.cycles == 0U)
 	{
 		cpu_ctx.variables.fetch_enabled = 1U;
