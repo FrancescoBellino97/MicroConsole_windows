@@ -580,8 +580,9 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.data = cpu_ctx.registers.L;
 		break;
 	case 0x86:	/*ADD A,(HL)*/
-		cpu_ctx.instruction.type = TYPE_ADD_A_HL;
+		cpu_ctx.instruction.type = TYPE_ADD_A_A16;
 		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
 		break;
 	case 0x87:	/*ADD A,A*/
 		cpu_ctx.instruction.type = TYPE_ADD_A_R8;
@@ -619,8 +620,9 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.data = cpu_ctx.registers.L;
 		break;
 	case 0x8E:	/*ADC A,(HL)*/
-		cpu_ctx.instruction.type = TYPE_ADC_A_HL;
+		cpu_ctx.instruction.type = TYPE_ADC_A_A16;
 		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
 		break;
 	case 0x8F:	/*ADC A,A*/
 		cpu_ctx.instruction.type = TYPE_ADC_A_R8;
@@ -658,8 +660,9 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.data = cpu_ctx.registers.L;
 		break;
 	case 0x96:	/*SUB HL*/
-		cpu_ctx.instruction.type = TYPE_SUB_A_HL;
+		cpu_ctx.instruction.type = TYPE_SUB_A_A16;
 		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
 		break;
 	case 0x97:	/*SUB A*/
 		cpu_ctx.instruction.type = TYPE_SUB_A_R8;
@@ -697,8 +700,9 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.data = cpu_ctx.registers.L;
 		break;
 	case 0x9E:	/*SBC A,(HL)*/
-		cpu_ctx.instruction.type = TYPE_SBC_A_HL;
+		cpu_ctx.instruction.type = TYPE_SBC_A_A16;
 		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
 		break;
 	case 0x9F:	/*SBC A,A*/
 		cpu_ctx.instruction.type = TYPE_SBC_A_R8;
@@ -737,9 +741,9 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.data = cpu_ctx.registers.L;
 		break;
 	case 0xA6:	/*AND (HL)*/
-		cpu_ctx.instruction.type = TYPE_AND_A_HL;
+		cpu_ctx.instruction.type = TYPE_AND_A_A16;
 		cpu_ctx.instruction.cycles = 2U;
-		cpu_ctx.instruction.data = cpu_ctx.registers.HL;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
 		break;
 	case 0xA7:	/*AND A*/
 		cpu_ctx.instruction.type = TYPE_AND_A_R8;
@@ -777,8 +781,9 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.data = cpu_ctx.registers.L;
 		break;
 	case 0xAE:	/*XOR (HL)*/
-		cpu_ctx.instruction.type = TYPE_XOR_A_HL;
+		cpu_ctx.instruction.type = TYPE_XOR_A_A16;
 		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
 		break;
 	case 0xAF:	/*XOR A*/
 		cpu_ctx.instruction.type = TYPE_XOR_A_R8;
@@ -816,8 +821,9 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.data = cpu_ctx.registers.L;
 		break;
 	case 0xB6:	/*OR (HL)*/
-		cpu_ctx.instruction.type = TYPE_OR_A_HL;
+		cpu_ctx.instruction.type = TYPE_OR_A_A16;
 		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
 		break;
 	case 0xB7:	/*OR A*/
 		cpu_ctx.instruction.type = TYPE_OR_A_R8;
@@ -855,8 +861,9 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.data = cpu_ctx.registers.L;
 		break;
 	case 0xBE:	/*CP (HL)*/
-		cpu_ctx.instruction.type = TYPE_CP_A_HL;
+		cpu_ctx.instruction.type = TYPE_CP_A_A16;
 		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
 		break;
 	case 0xBF:	/*CP A*/
 		cpu_ctx.instruction.type = TYPE_CP_A_R8;
@@ -865,28 +872,33 @@ static void decode(uint8_t op_code)
 		break;
 
 	case 0xC6:	/*ADD A,u8*/
-		cpu_ctx.instruction.type = TYPE_ADD_A_U8;
+		cpu_ctx.instruction.type = TYPE_ADD_A_A16;
 		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
 		break;
 
 	case 0xCE:	/*ADC A,u8*/
-		cpu_ctx.instruction.type = TYPE_ADC_A_U8;
+		cpu_ctx.instruction.type = TYPE_ADC_A_A16;
 		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
 		break;
 
 	case 0xD6:	/*SUB A,u8*/
-		cpu_ctx.instruction.type = TYPE_SUB_A_U8;
+		cpu_ctx.instruction.type = TYPE_SUB_A_A16;
 		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
 		break;
 
 	case 0xDE:	/*SBC A,u8*/
-		cpu_ctx.instruction.type = TYPE_SBC_A_U8;
+		cpu_ctx.instruction.type = TYPE_SBC_A_A16;
 		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
 		break;
 
 	case 0xE6:	/*AND u8*/
-		cpu_ctx.instruction.type = TYPE_AND_A_U8;
+		cpu_ctx.instruction.type = TYPE_AND_A_A16;
 		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
 		break;
 
 	case 0xE8:	/*ADD SP,s8*/
@@ -895,18 +907,21 @@ static void decode(uint8_t op_code)
 		break;
 
 	case 0xEE:	/*XOR u8*/
-		cpu_ctx.instruction.type = TYPE_XOR_A_U8;
+		cpu_ctx.instruction.type = TYPE_XOR_A_A16;
 		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
 		break;
 
 	case 0xF6:	/*OR u8*/
-		cpu_ctx.instruction.type = TYPE_OR_A_U8;
+		cpu_ctx.instruction.type = TYPE_OR_A_A16;
 		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
 		break;
 
 	case 0xFE:	/*CP u8*/
-		cpu_ctx.instruction.type = TYPE_CP_A_U8;
+		cpu_ctx.instruction.type = TYPE_CP_A_A16;
 		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
 		break;
 
 	default:
@@ -939,23 +954,10 @@ static void execute()
 		cpu_ctx.registers.A = ADD_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
 		break;
 
-	case TYPE_ADD_A_HL:
+	case TYPE_ADD_A_A16:
 		switch (cpu_ctx.instruction.cycles)
 		{
-		case 2:	/*First cycle read data at address HL*/
-			cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
-			break;
-		case 1:	/*Second cycle perform ADD*/
-			cpu_ctx.registers.A = ADD_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
-			break;
-		}
-		break;
-
-	case TYPE_ADD_A_U8:
-		switch (cpu_ctx.instruction.cycles)
-		{
-		case 2:	/*First cycle read data at address PC*/
-			cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
+		case 2:	/*First cycle do nothing (bus read already done during decode)*/
 			break;
 		case 1:	/*Second cycle perform ADD*/
 			cpu_ctx.registers.A = ADD_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
@@ -995,23 +997,10 @@ static void execute()
 		cpu_ctx.registers.A = ADC_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
 		break;
 
-	case TYPE_ADC_A_HL:
+	case TYPE_ADC_A_A16:
 		switch (cpu_ctx.instruction.cycles)
 		{
-		case 2:	/*First cycle read data at address HL*/
-			cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
-			break;
-		case 1:	/*Second cycle perform ADC*/
-			cpu_ctx.registers.A = ADC_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
-			break;
-		}
-		break;
-
-	case TYPE_ADC_A_U8:
-		switch (cpu_ctx.instruction.cycles)
-		{
-		case 2:	/*First cycle read data at address PC*/
-			cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
+		case 2:	/*First cycle do nothing (bus read already done during decode)*/
 			break;
 		case 1:	/*Second cycle perform ADC*/
 			cpu_ctx.registers.A = ADC_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
@@ -1024,23 +1013,10 @@ static void execute()
 		cpu_ctx.registers.A = SUB_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
 		break;
 
-	case TYPE_SUB_A_HL:
+	case TYPE_SUB_A_A16:
 		switch (cpu_ctx.instruction.cycles)
 		{
-		case 2:	/*First cycle read data at address HL*/
-			cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
-			break;
-		case 1:	/*Second cycle perform SUB*/
-			cpu_ctx.registers.A = SUB_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
-			break;
-		}
-		break;
-
-	case TYPE_SUB_A_U8:
-		switch (cpu_ctx.instruction.cycles)
-		{
-		case 2:	/*First cycle read data at address PC*/
-			cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
+		case 2:	/*First cycle do nothing (bus read already done during decode)*/
 			break;
 		case 1:	/*Second cycle perform SUB*/
 			cpu_ctx.registers.A = SUB_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
@@ -1053,23 +1029,10 @@ static void execute()
 		cpu_ctx.registers.A = SBC_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
 		break;
 
-	case TYPE_SBC_A_HL:
+	case TYPE_SBC_A_A16:
 		switch (cpu_ctx.instruction.cycles)
 		{
-		case 2:	/*First cycle read data at address HL*/
-			cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
-			break;
-		case 1:	/*Second cycle perform SBC*/
-			cpu_ctx.registers.A = SBC_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
-			break;
-		}
-		break;
-
-	case TYPE_SBC_A_U8:
-		switch (cpu_ctx.instruction.cycles)
-		{
-		case 2:	/*First cycle read data at address PC*/
-			cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
+		case 2:	/*First cycle do nothing (bus read already done during decode)*/
 			break;
 		case 1:	/*Second cycle perform SBC*/
 			cpu_ctx.registers.A = SBC_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
@@ -1082,23 +1045,10 @@ static void execute()
 		cpu_ctx.registers.A = AND_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
 		break;
 
-	case TYPE_AND_A_HL:
+	case TYPE_AND_A_A16:
 		switch (cpu_ctx.instruction.cycles)
 		{
-		case 2:	/*First cycle read data at address HL*/
-			cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
-			break;
-		case 1:	/*Second cycle perform AND*/
-			cpu_ctx.registers.A = AND_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
-			break;
-		}
-		break;
-
-	case TYPE_AND_A_U8:
-		switch (cpu_ctx.instruction.cycles)
-		{
-		case 2:	/*First cycle read data at address PC*/
-			cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
+		case 2:	/*First cycle do nothing (bus read already done during decode)*/
 			break;
 		case 1:	/*Second cycle perform AND*/
 			cpu_ctx.registers.A = ADD_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
@@ -1111,23 +1061,10 @@ static void execute()
 		cpu_ctx.registers.A = OR_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
 		break;
 
-	case TYPE_OR_A_HL:
+	case TYPE_OR_A_A16:
 		switch (cpu_ctx.instruction.cycles)
 		{
-		case 2:	/*First cycle read data at address HL*/
-			cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
-			break;
-		case 1:	/*Second cycle perform OR*/
-			cpu_ctx.registers.A = OR_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
-			break;
-		}
-		break;
-
-	case TYPE_OR_A_U8:
-		switch (cpu_ctx.instruction.cycles)
-		{
-		case 2:	/*First cycle read data at address PC*/
-			cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
+		case 2:	/*First cycle do nothing (bus read already done during decode)*/
 			break;
 		case 1:	/*Second cycle perform OR*/
 			cpu_ctx.registers.A = OR_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
@@ -1140,23 +1077,10 @@ static void execute()
 		cpu_ctx.registers.A = XOR_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
 		break;
 
-	case TYPE_XOR_A_HL:
+	case TYPE_XOR_A_A16:
 		switch (cpu_ctx.instruction.cycles)
 		{
-		case 2:	/*First cycle read data at address HL*/
-			cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
-			break;
-		case 1:	/*Second cycle perform XOR*/
-			cpu_ctx.registers.A = XOR_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
-			break;
-		}
-		break;
-
-	case TYPE_XOR_A_U8:
-		switch (cpu_ctx.instruction.cycles)
-		{
-		case 2:	/*First cycle read data at address PC*/
-			cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
+		case 2:	/*First cycle do nothing (bus read already done during decode)*/
 			break;
 		case 1:	/*Second cycle perform XOR*/
 			cpu_ctx.registers.A = XOR_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
@@ -1169,23 +1093,10 @@ static void execute()
 		(void) SUB_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
 		break;
 
-	case TYPE_CP_A_HL:
+	case TYPE_CP_A_A16:
 		switch (cpu_ctx.instruction.cycles)
 		{
-		case 2:	/*First cycle read data at address HL*/
-			cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
-			break;
-		case 1:	/*Second cycle perform CP*/
-			(void) SUB_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);
-			break;
-		}
-		break;
-
-	case TYPE_CP_A_U8:
-		switch (cpu_ctx.instruction.cycles)
-		{
-		case 2:	/*First cycle read data at address PC*/
-			cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
+		case 2:	/*First cycle do nothing (bus read already done during decode)*/
 			break;
 		case 1:	/*Second cycle perform CP*/
 			(void) SUB_U8_U8_BIT(cpu_ctx.registers.A, (uint8_t)cpu_ctx.instruction.data);

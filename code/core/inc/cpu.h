@@ -15,51 +15,43 @@
 
 
 /* Instruction type group */
-#define TYPE_NOP			(0U)
+#define TYPE_NOP			( 0U)
 /*ADD*/
-#define TYPE_ADD_A_R8		(1U)
-#define TYPE_ADD_A_HL		(2U)
-#define TYPE_ADD_A_U8		(3U)
-#define TYPE_ADD_HL_R16		(4U)
-#define TYPE_ADD_SP_S8		(5U)
+#define TYPE_ADD_A_R8		( 1U)
+#define TYPE_ADD_A_A16		( 2U)
+#define TYPE_ADD_HL_R16		( 3U)
+#define TYPE_ADD_SP_S8		( 4U)
 /*ADC*/
-#define TYPE_ADC_A_R8		(6U)
-#define TYPE_ADC_A_HL		(7U)
-#define TYPE_ADC_A_U8		(8U)
+#define TYPE_ADC_A_R8		( 5U)
+#define TYPE_ADC_A_A16		( 6U)
 /*SUB*/
-#define TYPE_SUB_A_R8		(9U)
-#define TYPE_SUB_A_HL		(10U)
-#define TYPE_SUB_A_U8		(11U)
+#define TYPE_SUB_A_R8		( 7U)
+#define TYPE_SUB_A_A16		( 8U)
 /*SBC*/
-#define TYPE_SBC_A_R8		(12U)
-#define TYPE_SBC_A_HL		(13U)
-#define TYPE_SBC_A_U8		(14U)
+#define TYPE_SBC_A_R8		( 9U)
+#define TYPE_SBC_A_A16		(10U)
 /*AND*/
-#define TYPE_AND_A_R8		(15U)
-#define TYPE_AND_A_HL		(16U)
-#define TYPE_AND_A_U8		(17U)
+#define TYPE_AND_A_R8		(11U)
+#define TYPE_AND_A_A16		(12U)
 /*OR*/
-#define TYPE_OR_A_R8		(18U)
-#define TYPE_OR_A_HL		(19U)
-#define TYPE_OR_A_U8		(20U)
+#define TYPE_OR_A_R8		(13U)
+#define TYPE_OR_A_A16		(14U)
 /*XOR*/
-#define TYPE_XOR_A_R8		(21U)
-#define TYPE_XOR_A_HL		(22U)
-#define TYPE_XOR_A_U8		(23U)
+#define TYPE_XOR_A_R8		(15U)
+#define TYPE_XOR_A_A16		(16U)
 /*CP*/
-#define TYPE_CP_A_R8		(24U)
-#define TYPE_CP_A_HL		(25U)
-#define TYPE_CP_A_U8		(26U)
+#define TYPE_CP_A_R8		(17U)
+#define TYPE_CP_A_A16		(18U)
 /*INC*/
-#define TYPE_INC_R8			(27U)
-#define TYPE_INC_HL			(28U)
-#define TYPE_INC_R16		(29U)
+#define TYPE_INC_R8			(19U)
+#define TYPE_INC_HL			(20U)
+#define TYPE_INC_R16		(21U)
 /*DEC*/
-#define TYPE_DEC_R8			(30U)
-#define TYPE_DEC_HL			(31U)
-#define TYPE_DEC_R16		(32U)
+#define TYPE_DEC_R8			(22U)
+#define TYPE_DEC_HL			(23U)
+#define TYPE_DEC_R16		(24U)
 /*LD*/
-#define TYPE_LD_R8_R8		(33U)
+#define TYPE_LD_R8_R8		(25U)
 
 
 typedef struct{
