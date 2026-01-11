@@ -113,7 +113,7 @@ endif
 
 
 # Dependency files generation
-DEPS				:=	$(ALL_OBJS:.o=.d)
+DEPS				=	$(ALL_OBJS:.o=.d)
 # Dependency files inclusion
 -include $(DEPS)
 
@@ -171,8 +171,8 @@ CFLAGS		+=	-g
 #Path to directory to include
 CPPFLAGS	:=	$(INCS)
 
-#Compiler option used in past (still needed?)
-#DEPFLAGS	:=	-MMD -MP
+#Compiler option for ???
+DEPFLAGS	:=	-MMD -MP
 
 #Define to expose structures and functions (only for unit tests)
 ifeq ($(MAKECMDGOALS),unit_test)
