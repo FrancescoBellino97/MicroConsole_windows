@@ -1098,6 +1098,13 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
 		break;
 
+	case 0xF9:	/*LD SP,HL*/
+		cpu_ctx.instruction.type = TYPE_LD_R16_R16;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
+		cpu_ctx.instruction.reg_16bit = &cpu_ctx.registers.SP;
+		break;
+
 	case 0xFE:	/*CP u8*/
 		cpu_ctx.instruction.type = TYPE_CP_A_A16;
 		cpu_ctx.instruction.cycles = 2U;
@@ -1389,6 +1396,17 @@ static void execute()
 		{
 		case 2:	/*First cycle perform LD*/
 			bus_write(cpu_ctx.registers.HL--, cpu_ctx.registers.A);
+			break;
+		case 1:	/*Second cycle do nothing*/
+			break;
+		}
+		break;
+
+	case TYPE_LD_R16_R16:
+		switch (cpu_ctx.instruction.cycles)
+		{
+		case 2:	/*First cycle perform LD*/
+			*cpu_ctx.instruction.reg_16bit = cpu_ctx.instruction.data;
 			break;
 		case 1:	/*Second cycle do nothing*/
 			break;

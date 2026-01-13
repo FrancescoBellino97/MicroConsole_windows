@@ -56,6 +56,7 @@
 #define TYPE_LD_A16_R8		(27U)
 #define TYPE_LD_HLI_R8		(28U)
 #define TYPE_LD_HLD_R8		(29U)
+#define TYPE_LD_R16_R16		(30U)
 
 
 typedef struct{
