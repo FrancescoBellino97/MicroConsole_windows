@@ -103,6 +103,12 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.cycles = 1U;
 		break;
 
+	case 0x02:	/*LD (BC),A*/
+		cpu_ctx.instruction.type = TYPE_LD_A16_R8;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = cpu_ctx.registers.BC;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.A;
+		break;
 	case 0x03:	/*INC BC*/
 		cpu_ctx.instruction.type = TYPE_INC_R16;
 		cpu_ctx.instruction.cycles = 2U;
@@ -118,13 +124,24 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.cycles = 1U;
 		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.B;
 		break;
+	case 0x06:	/*LD B,u8*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_U8;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.B;
+		break;
 
 	case 0x09:	/*ADD HL,BC*/
 		cpu_ctx.instruction.type = TYPE_ADD_HL_R16;
 		cpu_ctx.instruction.cycles = 2U;
 		cpu_ctx.instruction.data = cpu_ctx.registers.BC;
 		break;
-
+	case 0x0A:	/*LD A,(BC)*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_U8;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.BC);
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.A;
+		break;
 	case 0x0B:	/*DEC BC*/
 		cpu_ctx.instruction.type = TYPE_DEC_R16;
 		cpu_ctx.instruction.cycles = 2U;
@@ -140,7 +157,19 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.cycles = 1U;
 		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.C;
 		break;
+	case 0x0E:	/*LD C,u8*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_U8;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.C;
+		break;
 
+	case 0x12:	/*LD (DE),A*/
+		cpu_ctx.instruction.type = TYPE_LD_A16_R8;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = cpu_ctx.registers.DE;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.A;
+		break;
 	case 0x13:	/*INC DE*/
 		cpu_ctx.instruction.type = TYPE_INC_R16;
 		cpu_ctx.instruction.cycles = 2U;
@@ -156,13 +185,24 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.cycles = 1U;
 		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.D;
 		break;
+	case 0x16:	/*LD D,u8*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_U8;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.D;
+		break;
 
 	case 0x19:	/*ADD HL,DE*/
 		cpu_ctx.instruction.type = TYPE_ADD_HL_R16;
 		cpu_ctx.instruction.cycles = 2U;
 		cpu_ctx.instruction.data = cpu_ctx.registers.DE;
 		break;
-
+	case 0x1A:	/*LD A,(DE)*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_U8;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.DE);
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.A;
+		break;
 	case 0x1B:	/*DEC DE*/
 		cpu_ctx.instruction.type = TYPE_DEC_R16;
 		cpu_ctx.instruction.cycles = 2U;
@@ -178,7 +218,17 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.cycles = 1U;
 		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.E;
 		break;
+	case 0x1E:	/*LD E,u8*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_U8;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.E;
+		break;
 
+	case 0x22:	/*LD (HL+),A*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_U8;
+		cpu_ctx.instruction.cycles = 2U;
+		break;
 	case 0x23:	/*INC HL*/
 		cpu_ctx.instruction.type = TYPE_INC_R16;
 		cpu_ctx.instruction.cycles = 2U;
@@ -194,13 +244,24 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.cycles = 1U;
 		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.H;
 		break;
+	case 0x26:	/*LD H,u8*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_U8;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.H;
+		break;
 
 	case 0x29:	/*ADD HL,HL*/
 		cpu_ctx.instruction.type = TYPE_ADD_HL_R16;
 		cpu_ctx.instruction.cycles = 2U;
 		cpu_ctx.instruction.data = cpu_ctx.registers.HL;
 		break;
-
+	case 0x2A:	/*LD A,(HL+)*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_U8;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL++);
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.A;
+		break;
 	case 0x2B:	/*DEC HL*/
 		cpu_ctx.instruction.type = TYPE_DEC_R16;
 		cpu_ctx.instruction.cycles = 2U;
@@ -216,7 +277,17 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.cycles = 1U;
 		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.L;
 		break;
+	case 0x2E:	/*LD L,u8*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_U8;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.L;
+		break;
 
+	case 0x32:	/*LD (HL-),A*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_U8;
+		cpu_ctx.instruction.cycles = 2U;
+		break;
 	case 0x33:	/*INC SP*/
 		cpu_ctx.instruction.type = TYPE_INC_R16;
 		cpu_ctx.instruction.cycles = 2U;
@@ -236,7 +307,12 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.cycles = 2U;
 		cpu_ctx.instruction.data = cpu_ctx.registers.SP;
 		break;
-
+	case 0x3A:	/*LD A,(HL-)*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_U8;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL--);
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.A;
+		break;
 	case 0x3B:	/*DEC SP*/
 		cpu_ctx.instruction.type = TYPE_DEC_R16;
 		cpu_ctx.instruction.cycles = 2U;
@@ -250,6 +326,12 @@ static void decode(uint8_t op_code)
 	case 0x3D:	/*DEC A*/
 		cpu_ctx.instruction.type = TYPE_DEC_R8;
 		cpu_ctx.instruction.cycles = 1U;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.A;
+		break;
+	case 0x3E:	/*LD A,u8*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_U8;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
 		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.A;
 		break;
 
@@ -288,6 +370,12 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.cycles = 1U;
 		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.B;	/*Destination*/
 		cpu_ctx.instruction.data = cpu_ctx.registers.L;			/*Source*/
+		break;
+	case 0x46:	/*LD B,(HL)*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_U8;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.B;
 		break;
 	case 0x47:	/*LD B,A*/
 		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
@@ -331,6 +419,12 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.C;	/*Destination*/
 		cpu_ctx.instruction.data = cpu_ctx.registers.L;			/*Source*/
 		break;
+	case 0x4E:	/*LD C,(HL)*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_U8;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.C;
+		break;
 	case 0x4F:	/*LD C,A*/
 		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
 		cpu_ctx.instruction.cycles = 1U;
@@ -372,6 +466,12 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.cycles = 1U;
 		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.D;	/*Destination*/
 		cpu_ctx.instruction.data = cpu_ctx.registers.L;			/*Source*/
+		break;
+	case 0x56:	/*LD D,(HL)*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_U8;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.D;
 		break;
 	case 0x57:	/*LD D,A*/
 		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
@@ -415,6 +515,12 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.E;	/*Destination*/
 		cpu_ctx.instruction.data = cpu_ctx.registers.L;			/*Source*/
 		break;
+	case 0x5E:	/*LD E,(HL)*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_U8;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.E;
+		break;
 	case 0x5F:	/*LD E,A*/
 		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
 		cpu_ctx.instruction.cycles = 1U;
@@ -456,6 +562,12 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.cycles = 1U;
 		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.H;	/*Destination*/
 		cpu_ctx.instruction.data = cpu_ctx.registers.L;			/*Source*/
+		break;
+	case 0x66:	/*LD H,(HL)*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_U8;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.H;
 		break;
 	case 0x67:	/*LD H,A*/
 		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
@@ -499,13 +611,61 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.L;	/*Destination*/
 		cpu_ctx.instruction.data = cpu_ctx.registers.L;			/*Source*/
 		break;
+	case 0x6E:	/*LD L,(HL)*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_U8;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.L;
+		break;
 	case 0x6F:	/*LD L,A*/
 		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
 		cpu_ctx.instruction.cycles = 1U;
 		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.L;	/*Destination*/
 		cpu_ctx.instruction.data = cpu_ctx.registers.A;			/*Source*/
 		break;
+	case 0x70:	/*LD (HL),B*/
+		cpu_ctx.instruction.type = TYPE_LD_A16_R8;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = cpu_ctx.registers.HL;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.B;
+		break;
+	case 0x71:	/*LD (HL),C*/
+		cpu_ctx.instruction.type = TYPE_LD_A16_R8;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = cpu_ctx.registers.HL;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.C;
+		break;
+	case 0x72:	/*LD (HL),D*/
+		cpu_ctx.instruction.type = TYPE_LD_A16_R8;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = cpu_ctx.registers.HL;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.D;
+		break;
+	case 0x73:	/*LD (HL),E*/
+		cpu_ctx.instruction.type = TYPE_LD_A16_R8;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = cpu_ctx.registers.HL;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.E;
+		break;
+	case 0x74:	/*LD (HL),H*/
+		cpu_ctx.instruction.type = TYPE_LD_A16_R8;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = cpu_ctx.registers.HL;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.H;
+		break;
+	case 0x75:	/*LD (HL),L*/
+		cpu_ctx.instruction.type = TYPE_LD_A16_R8;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = cpu_ctx.registers.HL;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.L;
+		break;
 
+	case 0x77:	/*LD (HL),A*/
+		cpu_ctx.instruction.type = TYPE_LD_A16_R8;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = cpu_ctx.registers.HL;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.A;
+		break;
 	case 0x78:	/*LD A,B*/
 		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
 		cpu_ctx.instruction.cycles = 1U;
@@ -541,6 +701,12 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.cycles = 1U;
 		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.A;	/*Destination*/
 		cpu_ctx.instruction.data = cpu_ctx.registers.L;			/*Source*/
+		break;
+	case 0x7E:	/*LD A,(HL)*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_U8;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.HL);
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.A;
 		break;
 	case 0x7F:	/*LD A,A*/
 		cpu_ctx.instruction.type = TYPE_LD_R8_R8;
@@ -895,6 +1061,13 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
 		break;
 
+	case 0xE2:	/*LD (C),B*/
+		cpu_ctx.instruction.type = TYPE_LD_A16_R8;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = cpu_ctx.registers.C | 0xFF00;
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.B;
+		break;
+
 	case 0xE6:	/*AND u8*/
 		cpu_ctx.instruction.type = TYPE_AND_A_A16;
 		cpu_ctx.instruction.cycles = 2U;
@@ -910,6 +1083,13 @@ static void decode(uint8_t op_code)
 		cpu_ctx.instruction.type = TYPE_XOR_A_A16;
 		cpu_ctx.instruction.cycles = 2U;
 		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.PC++);
+		break;
+
+	case 0xF2:	/*LD A,(C)*/
+		cpu_ctx.instruction.type = TYPE_LD_R8_U8;
+		cpu_ctx.instruction.cycles = 2U;
+		cpu_ctx.instruction.data = bus_read(cpu_ctx.registers.C | 0xFF00);
+		cpu_ctx.instruction.reg_8bit = &cpu_ctx.registers.A;
 		break;
 
 	case 0xF6:	/*OR u8*/
@@ -1169,6 +1349,50 @@ static void execute()
 	/* LD */
 	case TYPE_LD_R8_R8:	/*It takes only 1 cycle*/
 		*cpu_ctx.instruction.reg_8bit = cpu_ctx.instruction.data;
+		break;
+
+	case TYPE_LD_R8_U8:	/*It takes only 1 cycle*/
+		switch (cpu_ctx.instruction.cycles)
+		{
+		case 2:	/*First cycle perform LD*/
+			*cpu_ctx.instruction.reg_8bit = cpu_ctx.instruction.data;
+			break;
+		case 1:	/*Second cycle do nothing*/
+			break;
+		}
+		break;
+
+	case TYPE_LD_A16_R8:
+		switch (cpu_ctx.instruction.cycles)
+		{
+		case 2:	/*First cycle perform LD*/
+			bus_write(cpu_ctx.instruction.data, *cpu_ctx.instruction.reg_8bit);
+			break;
+		case 1:	/*Second cycle do nothing*/
+			break;
+		}
+		break;
+
+	case TYPE_LD_HLI_R8:
+		switch (cpu_ctx.instruction.cycles)
+		{
+		case 2:	/*First cycle perform LD*/
+			bus_write(cpu_ctx.registers.HL++, cpu_ctx.registers.A);
+			break;
+		case 1:	/*Second cycle do nothing*/
+			break;
+		}
+		break;
+
+	case TYPE_LD_HLD_R8:
+		switch (cpu_ctx.instruction.cycles)
+		{
+		case 2:	/*First cycle perform LD*/
+			bus_write(cpu_ctx.registers.HL--, cpu_ctx.registers.A);
+			break;
+		case 1:	/*Second cycle do nothing*/
+			break;
+		}
 		break;
 
 	default:
